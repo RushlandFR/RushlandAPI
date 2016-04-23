@@ -1,0 +1,19 @@
+name: RushlandAPI
+authors: [Aquazus, Zaral]
+main: fr.rushland.api.Main
+version: ${project.version}
+commands:
+   money:
+      description: Money
+   grade:
+      description: Grade
+      aliases: [rank]
+   spec:
+      description: spec
+      aliases: [spectator]
+   tp:
+      description: Tp
+   aacautoreport:
+      description: aacautoreport
+   leave:
+      description: leave
