@@ -23,7 +23,7 @@ import fr.rushland.api.utils.Config;
 
 public class RushlandAPI {
 
-	private Main rushland;
+	private BukkitInjector rushland;
 
 	private DataManager datamanager;
 	private CommandManager commandemanager;
@@ -33,7 +33,7 @@ public class RushlandAPI {
 
 	public ArrayList<PlayerInfo> playerList = new ArrayList<>();
 
-	public RushlandAPI(Main rushland){
+	public RushlandAPI(BukkitInjector rushland){
 
 		this.rushland = rushland;
 		this.config = new Config(this.rushland, this);
@@ -43,7 +43,7 @@ public class RushlandAPI {
 
 	}
 
-	public Main getRushland() {
+	public BukkitInjector getRushland() {
 		return this.rushland;
 	}
 	public void enable() {

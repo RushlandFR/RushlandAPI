@@ -1,6 +1,6 @@
 name: RushlandAPI
 authors: [Aquazus, Zaral]
-main: fr.rushland.api.Main
+main: fr.rushland.api.BukkitInjector
 version: ${project.version}
 commands:
    money:

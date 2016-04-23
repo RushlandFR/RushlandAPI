@@ -7,14 +7,14 @@ import java.sql.SQLException;
 
 import org.bukkit.entity.Player;
 
-import fr.rushland.api.Main;
+import fr.rushland.api.BukkitInjector;
 import fr.rushland.api.RushlandAPI;
 
 public class Money {
 
 	private RushlandAPI api;
 
-	public Money(Main rushland, RushlandAPI api) {
+	public Money(BukkitInjector rushland, RushlandAPI api) {
 
 		this.api = api;
 

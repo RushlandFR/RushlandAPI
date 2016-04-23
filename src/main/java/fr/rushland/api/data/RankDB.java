@@ -11,13 +11,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import fr.rushland.api.Main;
+import fr.rushland.api.BukkitInjector;
 import fr.rushland.api.RushlandAPI;
 
 public class RankDB {
 
 	@SuppressWarnings("unused")
-	private Main rushland;
+	private BukkitInjector rushland;
 	private RushlandAPI api;
 	private HashMap<String, Integer> rankList = new HashMap<>();
 
@@ -25,7 +25,7 @@ public class RankDB {
 		return rankList;
 	}
 
-	public RankDB(Main rushland, RushlandAPI api){
+	public RankDB(BukkitInjector rushland, RushlandAPI api){
 		this.api = api;
 		this.rushland = rushland;
 	}

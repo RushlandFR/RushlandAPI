@@ -1,6 +1,6 @@
 package fr.rushland.api.redis;
 
-import fr.rushland.api.Main;
+import fr.rushland.api.BukkitInjector;
 import redis.clients.jedis.Jedis;
 
 import java.util.logging.Level;
@@ -21,14 +21,14 @@ public class Publisher {
         try {
             publisherJedis.publish(channel, message);
         } catch (Exception e) {
-            Main.getApi().getRushland().getLogger().log(Level.SEVERE, "Failed to publish ", e);
+            BukkitInjector.getApi().getRushland().getLogger().log(Level.SEVERE, "Failed to publish ", e);
         }
     }
 /*
     public void init() {
         StringBuilder sb = new StringBuilder();
         sb.append("init");
-        for (String game : Main.getApi().getRushland().getNpcManager().gameList) {
+        for (String game : BukkitInjector.getApi().getRushland().getNpcManager().gameList) {
             sb.append("#" + game + "");
 
 

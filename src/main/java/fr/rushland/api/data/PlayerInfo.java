@@ -7,14 +7,14 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
-import fr.rushland.api.Main;
+import fr.rushland.api.BukkitInjector;
 import fr.rushland.api.RushlandAPI;
 
 public class PlayerInfo {
 
 	private Player player;
 	private UUID uuid;
-	private RushlandAPI api = Main.getApi();
+	private RushlandAPI api = BukkitInjector.getApi();
 	
 	public int permLevel = 0;
 	public int rankPermLevel = 0;
@@ -33,7 +33,7 @@ public class PlayerInfo {
 
 
 	public static PlayerInfo get(UUID uuid) {
-		for (PlayerInfo playerInfo : Main.getApi().getPlayerList()) {
+		for (PlayerInfo playerInfo : BukkitInjector.getApi().getPlayerList()) {
 			if (playerInfo.getUUID().equals(uuid)) {
 				return playerInfo;
 			}
@@ -42,7 +42,7 @@ public class PlayerInfo {
 	}
 	
 	public static PlayerInfo get(Player player) {
-		for (PlayerInfo playerInfo : Main.getApi().getPlayerList()) {
+		for (PlayerInfo playerInfo : BukkitInjector.getApi().getPlayerList()) {
 			if (playerInfo.getPlayer().equals(player)) {
 				return playerInfo;
 			}

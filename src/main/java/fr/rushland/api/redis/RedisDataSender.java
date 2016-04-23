@@ -2,7 +2,7 @@ package fr.rushland.api.redis;
 
 
 
-import fr.rushland.api.Main;
+import fr.rushland.api.BukkitInjector;
 import fr.rushland.api.utils.CodeUtils;
 import org.bukkit.Bukkit;
 import redis.clients.jedis.Jedis;
@@ -45,7 +45,7 @@ public class RedisDataSender {
 	}
 
 	public static void refreshTimer() {
-		Bukkit.getScheduler().runTaskLater(Main.getApi().getRushland(), new Runnable() {
+		Bukkit.getScheduler().runTaskLater(BukkitInjector.getApi().getRushland(), new Runnable() {
 			@Override
 			public void run() {
 				sendData();
@@ -61,7 +61,7 @@ public class RedisDataSender {
 
         final Subscriber subscriber = new Subscriber(); //permet de reçevoir les données
 
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(Main.getApi().getRushland(), new Runnable() {
+        Bukkit.getServer().getScheduler().runTaskAsynchronously(BukkitInjector.getApi().getRushland(), new Runnable() {
             @Override
             public void run() {
                 try {

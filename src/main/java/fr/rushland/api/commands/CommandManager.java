@@ -6,16 +6,16 @@
 
 package fr.rushland.api.commands;
 
-import fr.rushland.api.Main;
+import fr.rushland.api.BukkitInjector;
 import fr.rushland.api.RushlandAPI;
 
 public class CommandManager {
 
 	private RushlandAPI api;
-	private Main rushland;
+	private BukkitInjector rushland;
 	
 	
-	public CommandManager(RushlandAPI api, Main rushland) {
+	public CommandManager(RushlandAPI api, BukkitInjector rushland) {
 		this.api = api;
 		this.rushland = rushland;
 	}

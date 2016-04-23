@@ -7,20 +7,20 @@ import java.util.HashMap;
 
 
 
-import fr.rushland.api.Main;
+import fr.rushland.api.BukkitInjector;
 import fr.rushland.api.RushlandAPI;
 
 public class KarmaDB {
 
 	@SuppressWarnings("unused")
-	private Main rushland;
+	private BukkitInjector rushland;
 	private RushlandAPI api;
 	private HashMap<String, Integer> karmaList = new HashMap<>();
 	
 	public HashMap<String, Integer> getKarmaList() {
 		return karmaList;
 	}
-	public KarmaDB(Main rushland, RushlandAPI api){
+	public KarmaDB(BukkitInjector rushland, RushlandAPI api){
 		this.api = api;
 		this.rushland = rushland;
 	}

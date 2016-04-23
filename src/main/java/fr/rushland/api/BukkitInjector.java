@@ -2,7 +2,7 @@ package fr.rushland.api;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Main extends JavaPlugin {
+public class BukkitInjector extends JavaPlugin {
 	
 	private static RushlandAPI api;
 	

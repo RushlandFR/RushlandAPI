@@ -12,12 +12,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.mysql.jdbc.Connection;
 
-import fr.rushland.api.Main;
+import fr.rushland.api.BukkitInjector;
 import fr.rushland.api.RushlandAPI;
 
 public class DataManager {
 
-	private Main rushland;
+	private BukkitInjector rushland;
 	private RushlandAPI api;
 	private RankDB rankdb;
 
@@ -50,7 +50,7 @@ public class DataManager {
 	 * 
 	 */
 
-	public DataManager(Main rushland, RushlandAPI api){
+	public DataManager(BukkitInjector rushland, RushlandAPI api){
 		this.rushland = rushland;
 		this.api = api;
 		this.money = new Money(this.rushland, this.api);

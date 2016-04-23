@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import fr.rushland.api.Main;
+import fr.rushland.api.BukkitInjector;
 import fr.rushland.api.RushlandAPI;
 
 public class StatsDB {
 
-	private Main rushland;
+	private BukkitInjector rushland;
 	private RushlandAPI api;
 
 	private String gameType;
@@ -32,7 +32,7 @@ public class StatsDB {
 	private ArrayList<String> wins = new ArrayList<String>();
 	private ArrayList<String> loses = new ArrayList<String>();
 
-	public StatsDB(Main rushland, RushlandAPI api) {
+	public StatsDB(BukkitInjector rushland, RushlandAPI api) {
 		this.api = api;
 		this.rushland = rushland;
 	}

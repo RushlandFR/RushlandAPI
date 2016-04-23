@@ -19,16 +19,16 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import fr.rushland.api.Main;
+import fr.rushland.api.BukkitInjector;
 import fr.rushland.api.RushlandAPI;
 import fr.rushland.api.data.PlayerInfo;
 
 public class PlayerJoin implements Listener{
 
-	private Main rushland;
+	private BukkitInjector rushland;
 	private RushlandAPI api;
 
-	public PlayerJoin (Main rushland,RushlandAPI api) {
+	public PlayerJoin (BukkitInjector rushland,RushlandAPI api) {
 		this.rushland = rushland;
 		this.api = api;
 	}
