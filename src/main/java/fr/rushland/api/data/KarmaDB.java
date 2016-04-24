@@ -20,6 +20,7 @@ public class KarmaDB {
 	public HashMap<String, Integer> getKarmaList() {
 		return karmaList;
 	}
+	
 	public KarmaDB(BukkitInjector rushland, RushlandAPI api){
 		this.api = api;
 		this.rushland = rushland;
@@ -30,7 +31,6 @@ public class KarmaDB {
 		for (int i = 1; i <= karmaSize; i++) {
 			String karma = getKarmaName(i);
 			karmaList.put(karma, getKarmaLevel(karma));
-
 		}
 	}
 	
@@ -52,7 +52,6 @@ public class KarmaDB {
 	}
 	
 	public String getKarmaName(int id) {
-		
 		try {
 			String rank;
 			
@@ -61,7 +60,7 @@ public class KarmaDB {
 			pst.executeQuery();
 			ResultSet result = pst.getResultSet();
 			
-			if(result.next()) {
+			if (result.next()) {
 				rank = result.getString(1);
 			} else {
 				rank = "null";
@@ -71,15 +70,11 @@ public class KarmaDB {
 		} catch (SQLException e){
 			e.printStackTrace();
 			return "null";
-		
 		}
-	
 	}
 	
 	public int getKarmaLevel(String karma) {
-		
-		try{
-			
+		try {
 			PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT permLevel FROM KarmaSystem WHERE karma = ?");
 			pst.setString(1, karma);
 			pst.executeQuery();
@@ -89,24 +84,20 @@ public class KarmaDB {
 			} else {
 				return 0;
 			}
-			
-		} catch (SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return 0;
 		}
-		
 	}
-	public boolean isKarmaExist(String karmaname){
-		
-		try{
-			
+	
+	public boolean isKarmaExist(String karmaname) {
+		try {
 			PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT id FROM KarmaSystem WHERE karma = ?");
 			
 			pst.setString(1, karmaname);
 			ResultSet result = pst.executeQuery();
 			
-			if(result.first()) {
-								
+			if (result.first()) {
 				return true;
 			} else {
 				return false;
@@ -114,17 +105,12 @@ public class KarmaDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
-			
 		}
-		
 	}
 	
 	public boolean addnewKarma(String karmaname, int defaultkarmalevel) {
-		
-		try{
-			
-			if(!karmaList.containsKey(karmaname)) {
-			
+		try {
+			if (!karmaList.containsKey(karmaname)) {
 				PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("INSERT INTO KarmaSystem (karma, permLevel) VALUES(?, ?)");
 			
 				pst.setString(1, karmaname);
@@ -134,41 +120,29 @@ public class KarmaDB {
 				karmaList.put(karmaname, defaultkarmalevel);
 
 				return true;
-			
 			} else {
 				return false;
 			}
 		} catch (SQLException e) {
 			return false;
 		}
-		
 	}
 	
 	public boolean removeKarma(String karmaname) {
-		
-		try{
-			
-			if(!karmaList.containsKey(karmaname)) {
-			
+		try {
+			if (!karmaList.containsKey(karmaname)) {
 				PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("DELETE FROM KarmaSystem WHERE karma= ?");
 				pst.setString(1, karmaname);
 				pst.executeUpdate();
 				pst.close();
 				karmaList.remove(karmaname);
 				return true;
-				
 			} else {
-				
 				return false;
-				
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
-		
 	}
-	
-	
 }
