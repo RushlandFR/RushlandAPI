@@ -15,9 +15,7 @@ public class Money {
 	private RushlandAPI api;
 
 	public Money(BukkitInjector rushland, RushlandAPI api) {
-
 		this.api = api;
-
 	}
 
 	public boolean updateMoney(PlayerInfo pInfo) {
@@ -27,14 +25,10 @@ public class Money {
 	}
 
 	public boolean addPlayermoney (Player player, String moneyname, int addvalue) {
-
-
 		try {
-
 			if (!this.api.getDataManager().moneylist.contains(moneyname)) {
 				return false;
 			}
-
 			if (player.isOnline()) {
 				PlayerInfo pInfo = PlayerInfo.get(player);
 				switch (moneyname) {
@@ -50,7 +44,7 @@ public class Money {
 					return false;
 				}
 			}
-			if(moneyname.equalsIgnoreCase("rushcoins")) {
+			if (moneyname.equalsIgnoreCase("rushcoins")) {
 				PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = rushcoins + ? WHERE uuid = ?");
 
 				pst.setDouble(1, addvalue);
@@ -58,32 +52,25 @@ public class Money {
 
 				pst.executeUpdate();
 				pst.close();
-			} else if(moneyname.equalsIgnoreCase("shopcoins")) {
-
+			} else if (moneyname.equalsIgnoreCase("shopcoins")) {
 				PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = shopcoins + ? WHERE uuid = ?");
 				pst.setInt(1, addvalue);
 				pst.setString(2, player.getUniqueId().toString());
 				pst.executeUpdate();
 				pst.close();
-
 			} else {
 				return false;
 			}
-
 		} catch (SQLException exception){
 			exception.printStackTrace();
 			return false;
 		}
-
-
 		return true;
 	}
 
 	public int getPlayerMoney (Player player, String moneyname) {
-
-
 		try {
-			if(moneyname.equalsIgnoreCase("rushcoins")) {
+			if (moneyname.equalsIgnoreCase("rushcoins")) {
 				PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT rushcoins FROM PlayerInfo WHERE uuid = ?");
 
 				pst.setString(1, player.getUniqueId().toString());
@@ -93,8 +80,7 @@ public class Money {
 					return result.getInt(1);
 				}
 				pst.close();
-			} else if(moneyname.equalsIgnoreCase("shopcoins")) {
-
+			} else if (moneyname.equalsIgnoreCase("shopcoins")) {
 				PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT shopcoins FROM PlayerInfo WHERE uuid = ?");
 				pst.setString(1, player.getUniqueId().toString());
 				pst.executeQuery();
@@ -103,24 +89,17 @@ public class Money {
 					return result.getInt(1);
 				}
 				pst.close();
-
 			} 
-
-		} catch (SQLException exception){
+		} catch (SQLException exception) {
 			exception.printStackTrace();
 		}
 		return -1;
-
 	}
-	public boolean removePlayermoney (Player player, String moneyname, int removevalue) {
-
-
+	public boolean removePlayermoney(Player player, String moneyname, int removevalue) {
 		try {
-
 			if (!this.api.getDataManager().moneylist.contains(moneyname)) {
 				return false;
 			}
-
 			if (player.isOnline()) {
 				PlayerInfo pInfo = PlayerInfo.get(player);
 				switch (moneyname) {
@@ -132,7 +111,7 @@ public class Money {
 				break;
 				}
 			}
-			if(moneyname.equalsIgnoreCase("rushcoins")){
+			if (moneyname.equalsIgnoreCase("rushcoins")) {
 				PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = rushcoins - ? WHERE uuid = ?");
 
 				pst.setInt(1, removevalue);
@@ -140,8 +119,7 @@ public class Money {
 
 				pst.executeUpdate();
 				pst.close();
-			} else if(moneyname.equalsIgnoreCase("shopcoins")){
-
+			} else if(moneyname.equalsIgnoreCase("shopcoins")) {
 				PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = shopcoins - ? WHERE uuid = ?");
 
 				pst.setInt(1, removevalue);
@@ -152,29 +130,21 @@ public class Money {
 			} else {
 				return false;
 			}
-
 		} catch (SQLException exception){
 			exception.printStackTrace();
 			return false;
 		}
-
 		return true;
 	}
 
 	public boolean setPlayermoney (Player player, String moneyname, int setvalue) {
-
-
-		if(setvalue < 0){
+		if (setvalue < 0) {
 			return true;
 		}
-
 		try {
-
 			if (!this.api.getDataManager().moneylist.contains(moneyname)) {
 				return false;
 			}
-
-
 			if (player.isOnline()) {
 				PlayerInfo pInfo = PlayerInfo.get(player);
 				switch (moneyname) {
@@ -186,9 +156,7 @@ public class Money {
 				break;
 				}
 			}
-
-
-			if(moneyname.equalsIgnoreCase("rushcoins")){
+			if (moneyname.equalsIgnoreCase("rushcoins")) {
 				PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = ? WHERE uuid = ?");
 
 				pst.setInt(1, setvalue);
@@ -196,25 +164,19 @@ public class Money {
 
 				pst.executeUpdate();
 
-			} else if(moneyname.equalsIgnoreCase("shopcoins")){
+			} else if (moneyname.equalsIgnoreCase("shopcoins")) {
 				PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = ? WHERE uuid = ?");
 				pst.setInt(1, setvalue);
 				pst.setString(2, player.getUniqueId().toString());
 
 				pst.executeUpdate();
-
 			} else {
 				return false;
 			}
-
 		} catch (SQLException exception) {
 			exception.printStackTrace();
 			return false;
 		}
-
 		return true;
 	}
-
-
-
 }
