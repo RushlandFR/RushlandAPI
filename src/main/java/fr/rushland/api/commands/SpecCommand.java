@@ -43,5 +43,4 @@ public class SpecCommand implements CommandExecutor {
         }
         return true;
     }
-
 }
