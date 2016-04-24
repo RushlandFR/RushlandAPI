@@ -9,16 +9,11 @@ import fr.rushland.api.RushlandAPI;
 
 public class PlayerDB {
 
-
 	private RushlandAPI api;
 
-	public PlayerDB (RushlandAPI api){
-
+	public PlayerDB(RushlandAPI api){
 		this.api = api;
-
 	}
-
-	
 
 	public boolean isInsert(Player player) {
 		boolean insert = false;
@@ -29,7 +24,6 @@ public class PlayerDB {
 			ResultSet result = pst.getResultSet();
 			insert = result.next();
 			pst.close();
-
 		} catch (SQLException e){
 			e.printStackTrace();
 		}
@@ -44,36 +38,28 @@ public class PlayerDB {
 			ResultSet result = pst.getResultSet();
 			if (result.next())
 			return result;
-
 		} catch (SQLException e){
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-
 	public void setPlayerPermLevel(Player player , int ranklevel){
-
-		try{
-
+		try {
 			PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET permLevel = ? WHERE uuid=?");
 
 			pst.setInt(1, ranklevel);
 			pst.setString(2, player.getUniqueId().toString());
 			pst.executeUpdate();
 			pst.close();
-		} catch (SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public void setRankPlayer(Player player, String rank, boolean isFemale) {
-
-		try{
-
-			if(this.api.getDataManager().getRankSystemDB().isRankExist(rank)){
-
+		try {
+			if (this.api.getDataManager().getRankSystemDB().isRankExist(rank)) {
 				PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerRank = ?, rankFemale = ? WHERE uuid = ?");
 
 				pst.setString(1, rank);
@@ -83,17 +69,13 @@ public class PlayerDB {
 				pst.executeUpdate();
 				pst.close();
 			}
-
 		} catch (SQLException e){
 			e.printStackTrace();
 		}
-
 	}
 
 	public void setKarmaPlayer(Player player, String karma ) {
-
-		try{
-
+		try {
 			PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE uuid = ?");
 
 			pst.setString(1, karma);
@@ -104,22 +86,21 @@ public class PlayerDB {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void deleteKarmaPlayer(Player player) {
-
-		try{
-
+		try {
 			PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = player, expire = null WHERE uuid = ?");
 
 			pst.setString(1, player.getUniqueId().toString());
 			pst.executeUpdate();
 			pst.close();
-		} catch (SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+	
 	public void playerInit(Player player) {
-		try{
+		try {
 			PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("INSERT INTO PlayerInfo(uuid, playerName, permLevel, playerRank, playerKarma, rushcoins, shopcoins) VALUES(?, ?, ?, ?, ?, ?, ?)");
 			pst.setString(1, player.getUniqueId().toString());
 			pst.setString(2, player.getName());
@@ -130,10 +111,8 @@ public class PlayerDB {
 			pst.setInt(7, 0);
 			pst.executeUpdate();
 			pst.close();
-		} catch(SQLException e){
+		} catch(SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
-
 }
