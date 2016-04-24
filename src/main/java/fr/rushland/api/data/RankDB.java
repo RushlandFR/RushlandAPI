@@ -37,6 +37,7 @@ public class RankDB {
 			rankList.put(karma, getRankLevel(karma));
 		}
 	}
+	
 	public int getAllRank()  {
 		int maxSub = 0;
 
@@ -54,33 +55,26 @@ public class RankDB {
 		return maxSub;
 	}
 
-
 	public int getRankLevel(String karma) {
-
-		try{
-
+		try {
 			PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT permLevel FROM RankSystem WHERE rank = ?");
 			pst.setString(1, karma);
 			pst.executeQuery();
 			ResultSet result = pst.getResultSet();
-			if(result.next()) {
+			if (result.next()) {
 				return result.getInt(1);
 			} else {
 				return 0;
 			}
-
 		} catch (SQLException e){
 			e.printStackTrace();
 			return 0;
 		}
-
 	}
 
 	public String getRankName(int id) {
-
 		try {
 			String rank;
-
 			PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT rank FROM RankSystem WHERE id = ?");
 			pst.setInt(1, id);
 			pst.executeQuery();
@@ -96,40 +90,32 @@ public class RankDB {
 		} catch (SQLException e){
 			e.printStackTrace();
 			return "null";
-
 		}
-
 	}
 
 	public boolean isRankExist(String rankname) {
-
-		try{
+		try {
 			PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT id FROM RankSystem WHERE rank = ?");
 
 			pst.setString(1, rankname);
 			pst.executeQuery();
 			ResultSet result = pst.getResultSet();
 
-			if(result.next()){			
+			if (result.next()) {			
 				return true;
 			} else {
 				return false;
 			}
 
-		}catch (SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
 
-
-
 	public boolean addnewRank(String rankname, int defaultranklevel) {
-
-		try{
-
-			if(!isRankExist(rankname)) {
-
+		try {
+			if (!isRankExist(rankname)) {
 				PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("INSERT INTO RankSystem(rank, permLevel) VALUES(?, ?)");
 
 				pst.setString(1, rankname);
@@ -138,58 +124,38 @@ public class RankDB {
 				pst.executeUpdate();
 				pst.close();
 				return true;
-
 			} else {
-
 				return false;
-
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
-
 	}
 
 	public boolean removeRank(String rankname) {
-
 		try {
-
-			if(isRankExist(rankname)) {
-
+			if (isRankExist(rankname)) {
 				PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("DELETE FROM RankSystem WHERE rank = ?");
 
 				pst.setString(1, rankname);
 
 				pst.executeUpdate();
 				pst.close();
-
 				return true;
-
 			} else {
-
 				return false;
-
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
-
 	}
 
-
-
 	public boolean setdefaultlevel(int ID, String name, int level){
-
-		if(ID == 1){
-
-			try{
-
-				if(isRankExist(name)){
-
+		if (ID == 1) {
+			try {
+				if (isRankExist(name)) {
 					PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE RankSystem SET permLevel = ? WHERE rank = ?");
 
 					pst.setInt(1, level);
@@ -199,25 +165,16 @@ public class RankDB {
 					pst.close();
 
 					return true;
-
 				} else {
-
 					return false;
-
 				}
-
 			} catch (SQLException e){
 				e.printStackTrace();
 				return false;
 			}
-
-
 		} else if (ID == 2) {
-
-			try{
-
-				if(api.getDataManager().getKarmaDB().getKarmaList().containsKey(name)){
-
+			try {
+				if (api.getDataManager().getKarmaDB().getKarmaList().containsKey(name)) {
 					PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE KarmaSystem SET permLevel = ? WHERE karma = ?");
 
 					pst.setInt(1, level);
@@ -227,20 +184,14 @@ public class RankDB {
 					pst.close();
 					return true;
 				} else {
-
 					return false;
-
 				}
-
 			} catch (SQLException e){
 				e.printStackTrace();
 				return false;
 			}
-
 		} else {
 			return false;
 		}
-
 	}
-
 }
