@@ -96,8 +96,6 @@ public class DataManager {
 		}
 	}
 
-
-
 	public boolean isConnected() {
 		try {
 			if((this.connection == null) || (this.connection.isClosed())) {
@@ -105,20 +103,18 @@ public class DataManager {
 			} else {
 				return true;
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return false;
 	}
 
-	public void connection(){
-
+	public void connection() {
 		this.configfile = new File(this.rushland.getDataFolder(),"config.yml");
 		this.config = YamlConfiguration.loadConfiguration(configfile);
 
-		if(!isConnected()){
-			try{
+		if (!isConnected()) {
+			try {
 				String ip = config.getString("database.host");
 				String user = config.getString("database.user");
 				String passwd = config.getString("database.password");
@@ -131,37 +127,30 @@ public class DataManager {
 						refreshConnection();
 					}
 				}, 20L*300);
-
-
 			} catch (SQLException e) {
-
 				Bukkit.getServer().shutdown();
 				e.printStackTrace();
-
 			}
 		}
 	}
 
 	public void deconnection() {
-		if(isConnected()) {
-
-			try{
+		if (isConnected()) {
+			try {
 				this.connection.close();
 				Bukkit.getScheduler().cancelTask(DataId);
-
-
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		} else {
-			this.rushland.getLogger().info("MariaDB pool is already deconnecte...");
+			this.rushland.getLogger().info("MariaDB pool is already disconnected...");
 		}
 	}
 
 	public void refreshConnection() {
 		this.rushland.getLogger().info("Refreshing MariaDB pool...");
 		try {
-			if(isConnected()){
+			if (isConnected()) {
 				deconnection();
 				connection();
 			} else {
@@ -172,5 +161,4 @@ public class DataManager {
 			Bukkit.getServer().shutdown();
 		}
 	}
-
 }
