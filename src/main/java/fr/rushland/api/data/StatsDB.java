@@ -61,8 +61,6 @@ public class StatsDB {
 		return false;
 	}
 
-
-
 	public void add(String uuid) {
 		try {
 			PreparedStatement queryStatement = null;
@@ -90,12 +88,11 @@ public class StatsDB {
 		}
 	}
 
-	public  void insertPlayer(String uuid) {
+	public void insertPlayer(String uuid) {
 		try {
 			rushland.getLogger().info("Inserting stats into SQL Server...");
 
 			if (useKills && !kills.isEmpty() && kills.containsKey(uuid)) {
-
 				int value = kills.get(uuid);
 				PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("UPDATE stats_" + gameType + " SET kills = kills + ? WHERE uuid = ?");
 				queryStatement.setInt(1, value);
@@ -103,7 +100,6 @@ public class StatsDB {
 				queryStatement.executeUpdate();
 				queryStatement.close();
 				kills.remove(uuid);
-
 			}
 			if (useDeaths && !deaths.isEmpty() && deaths.containsKey(uuid)) {
 				int value = deaths.get(uuid);
@@ -113,8 +109,6 @@ public class StatsDB {
 				queryStatement.executeUpdate();
 				queryStatement.close();
 				deaths.remove(uuid);
-
-
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
