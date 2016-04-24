@@ -9,16 +9,12 @@ public class Config {
 	@SuppressWarnings("unused")
 	private RushlandAPI api;
 
-
 	public Config(BukkitInjector rushland,RushlandAPI api){
 		this.api = api;
 		this.rushland = rushland;
 	}
 
-	public void initConf () {
+	public void initConf() {
 		rushland.saveDefaultConfig();
-
 	}
-
-
 }
