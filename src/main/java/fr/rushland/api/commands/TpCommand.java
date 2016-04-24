@@ -15,6 +15,7 @@ public class TpCommand implements CommandExecutor {
 
     @SuppressWarnings("unused")
 	private RushlandAPI api;
+    
     public TpCommand(RushlandAPI api) {
         this.api = api;
     }
@@ -39,5 +40,4 @@ public class TpCommand implements CommandExecutor {
         }
         return true;
     }
-
 }
