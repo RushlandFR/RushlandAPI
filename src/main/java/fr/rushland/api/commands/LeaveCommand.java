@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 
 import fr.rushland.api.RushlandAPI;
 
-
 public class LeaveCommand implements CommandExecutor {
 
     private RushlandAPI pl;
@@ -17,6 +16,7 @@ public class LeaveCommand implements CommandExecutor {
     public LeaveCommand(RushlandAPI pl) {
         this.pl = pl;
     }
+    
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
         	Player player = (Player) sender;
@@ -26,6 +26,4 @@ public class LeaveCommand implements CommandExecutor {
         }
         return true;
     }
-    
-
 }
