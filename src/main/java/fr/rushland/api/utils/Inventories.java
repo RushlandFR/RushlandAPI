@@ -21,7 +21,6 @@ private RushlandAPI api;
 	}
 
 	public ItemStack createitems(Material material,String displayname,List<String> lore) {
-		
 		ItemStack item = new ItemStack(material);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(displayname);
@@ -32,20 +31,15 @@ private RushlandAPI api;
 	}
 	
 	public Inventory createinv(int size,String name) {
-		
 		Inventory inv = Bukkit.createInventory(null, size , name);
 		return inv;
-		
 	}
 	
 	public void clearinv(Player player){
-		
 		player.getInventory().clear();
 		player.getInventory().setBoots(new ItemStack(Material.AIR));
 		player.getInventory().setLeggings(new ItemStack(Material.AIR));
 		player.getInventory().setChestplate(new ItemStack(Material.AIR));
 		player.getInventory().setHelmet(new ItemStack(Material.AIR));
-		
 	}
-	
 }
