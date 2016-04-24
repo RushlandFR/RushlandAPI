@@ -10,9 +10,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-/**
- * Created by Zaral on 10/02/2016.
- */
 public class ReportCommand implements CommandExecutor {
 
     private RushlandAPI pl;
@@ -34,9 +31,6 @@ public class ReportCommand implements CommandExecutor {
         }
         String message = sb.toString().trim();
         pl.runBungeeConsoleCommand(player, message);
-
         return true;
     }
-
-
 }
