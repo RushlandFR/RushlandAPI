@@ -18,9 +18,7 @@ public class BukkitInjector extends JavaPlugin {
 		api.disable();
 	}
 
-	
 	public static RushlandAPI getApi() {
 		return api;
 	}
-	
 }
