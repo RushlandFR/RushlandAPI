@@ -18,17 +18,13 @@ public class EventManager {
 	private RushlandAPI api;
 	private PluginManager pm;
 	 
-	public EventManager (BukkitInjector rushland, RushlandAPI api){
+	public EventManager(BukkitInjector rushland, RushlandAPI api){
 		this.rushland = rushland;
 		this.api = api;
 		this.pm = Bukkit.getPluginManager();
 	}
 	
 	public void registerEvent() {
-		
 		this.pm.registerEvents(new PlayerJoin(this.rushland,this.api), this.rushland);
-		
-		
 	}
-	
 }
