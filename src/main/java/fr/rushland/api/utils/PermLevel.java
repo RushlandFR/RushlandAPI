@@ -29,9 +29,6 @@ public enum PermLevel {
 	YOUTUBEUR(5),
 	STREAMER(5),
 	GRAPHISTE(10);
-	
-
-
 
     PermLevel(int level) {
         this.level = level;
@@ -42,6 +39,4 @@ public enum PermLevel {
     public int getLevel() {
     	return this.level;
     }
-
-	
 }
