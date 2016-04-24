@@ -29,8 +29,6 @@ public class PlayerInfo {
 
 	public boolean isFemale = false;
 	public Date expire, now ;
-	
-
 
 	public static PlayerInfo get(UUID uuid) {
 		for (PlayerInfo playerInfo : BukkitInjector.getApi().getPlayerList()) {
@@ -49,7 +47,6 @@ public class PlayerInfo {
 		}
 		return null;
 	}
-	
 	
 	public PlayerInfo(Player player) {
 		this.player = player;
@@ -102,7 +99,6 @@ public class PlayerInfo {
 		return isFemale;
 	}
 
-
 	public String getKarmaRank() {
 		return karma;
 	}
@@ -128,6 +124,4 @@ public class PlayerInfo {
 		this.uuid = null;
 		api.getPlayerList().remove(this);
 	}
-
-
 }
