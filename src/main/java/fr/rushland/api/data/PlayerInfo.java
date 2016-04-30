@@ -77,10 +77,10 @@ public class PlayerInfo {
 			e.printStackTrace();
 		}
 		api.playerList.add(this);
-		System.out.print("[Debug] Rank = " + rank);
-		System.out.print("[Debug] PermLevel = " + getMaxPermLevel());
+		System.out.println("[Debug] Rank = " + rank);
+		System.out.println("[Debug] PermLevel = " + getMaxPermLevel());
 
-		System.out.print("[Debug] PlayerInfo Loaded");
+		System.out.println("[Debug] PlayerInfo Loaded");
 	}
 
 	public int getMaxPermLevel() {
