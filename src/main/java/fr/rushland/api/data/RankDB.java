@@ -1,9 +1,3 @@
-/*
- * This file is subject to the terms and conditions defined in file 'LICENSE.txt'.
- * Copyright (C) 2016 by DOCQUIER B. and RUSHLAND . 
- * All right reserved.  
- */
-
 package fr.rushland.api.data;
 
 import java.sql.PreparedStatement;
