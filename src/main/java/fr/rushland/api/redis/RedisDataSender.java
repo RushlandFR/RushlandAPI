@@ -12,10 +12,10 @@ public class RedisDataSender {
 
     public static String serverId;
     public static int ports;
-    public static String channelSub = "RLGame";
+    public static String channelSub = "RLGameManager";
     public static Publisher getPublisher = null;
 
-    public static String motd = "§2Ouvert";
+    public static String motd = "§cDémarrage...";
 
     public static void setup( String type,  int port) {
         serverId = type;
@@ -23,24 +23,15 @@ public class RedisDataSender {
         subscribeChannels();
         sendData();
         refreshTimer();
+        getPublisher.publish(type + "#wakeup#" + port);
     }
 
-    public static boolean ok = true;
-    private static void checkMotd() {
-        if (motd.equals("§cFin de partie...")) {
-            if (ok) {
-                getPublisher.publish("delete#" + serverId + "#" + ports);
-                ok = false;
-            }
-        }
-
-    }
     public static void sendData() {
 		String key = serverId + ports;
 		String value = ports + "#" + motd  + "#" + Bukkit.getServer().getOnlinePlayers().size() + "#" + Bukkit.getServer().getMaxPlayers();
 		Jedis jedis = JedisFactory.getInstance().getJedisPool().getResource();
 		jedis.set(key, value);
-		jedis.expire(key, 8);
+		jedis.expire(key, 2);
 		jedis.close();
 	}
 
@@ -50,9 +41,8 @@ public class RedisDataSender {
 			public void run() {
 				sendData();
 				refreshTimer();
-                checkMotd();
 			}
-		}, 20L * 2);
+		}, 20L);
 	}
 
 
