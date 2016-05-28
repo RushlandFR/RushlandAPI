@@ -1,7 +1,5 @@
 package fr.rushland.api.commands;
 
-import net.md_5.bungee.api.ChatColor;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,279 +11,246 @@ import fr.rushland.api.data.PlayerInfo;
 
 public class RankCommand implements CommandExecutor {
 
-	private RushlandAPI api;
+    private RushlandAPI api;
 
-	public RankCommand(RushlandAPI api) {
-		this.api = api;
-	}
+    public RankCommand(RushlandAPI api) {
+        this.api = api;
+    }
 
-	@SuppressWarnings({ "deprecation" })
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,String[] args) {
-		if (sender instanceof Player) {
-			Player player = (Player) sender;
-			int permlvl = PlayerInfo.get(player).getMaxPermLevel();
-			if (permlvl < 40) {
-				return true;
-			}
-		}
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label,String[] args) {
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            int permlvl = PlayerInfo.get(player).getMaxPermLevel();
+            if (permlvl < 40) {
+                sender.sendMessage("§cVous n'avez pas la permission.");
+                return true;
+            }
+        }
 
-		if (args.length == 0) {
-			sendCommandInfo(sender);
-		} else if (args.length == 2) {
-			String parametre1 = args[0];
-			if (parametre1.equalsIgnoreCase("PLAYER")) {
-				String pseudo = args[1];
-				try {
-					Player player = (Player) Bukkit.getOfflinePlayer(pseudo);
-					PlayerInfo pInfo;
-					if (player.isOnline()) {
-						pInfo = PlayerInfo.get(player);
-					} else {
-						pInfo = new PlayerInfo(player);
-					}
-					String grade = pInfo.getRank();
-					int permlevel = pInfo.getMaxPermLevel();
-					sender.sendMessage("§2"+player.getName()+"§6 est §2"+grade+ "§6 avec une perm level de §2 "+permlevel);
-					sender.sendMessage("§2"+player.getName()+"§6 a le karma §2"+ pInfo.getKarmaRank());
-					return true;
-				} catch (Exception e) {
-					sender.sendMessage("§cLe joueur sélectionné n'éxiste pas !");
-				}
-			} else {
-				sender.sendMessage("§cLes arguments de la commande sont inexistant ou incomplet !");
-				sendCommandInfo(sender);
-			}
-		} else if (args.length == 3) {
-			String parametre1 = args[0];
-			if (parametre1.equalsIgnoreCase("GROUPE")) {
-				String nomgroupe = args[1];
-				String parametre2 = args[2];
-				if (parametre2.equalsIgnoreCase("remove")) {
-					boolean remove = this.api.getDataManager().getRankSystemDB().removeRank(nomgroupe);
-					if (remove) {
-						sender.sendMessage("§6Le grade §2"+nomgroupe+" §6vient d'être suprimer !");
-						api.getDataManager().getRankSystemDB().getRankList().remove(nomgroupe);
-					} else {
-						sender.sendMessage("§6Le grade ne peut §tre remove ou n'existe pas !");
-					}
-				} else {
-					sender.sendMessage("§cLes arguments de la commande sont inexistant ou incomplet !");
-					sendCommandInfo(sender);
-				}
-			} else if (parametre1.equalsIgnoreCase("KARMA")) {
-				String nomgroupe = args[1];
-				String parametre2 = args[2];
-				if (parametre2.equalsIgnoreCase("remove")) {
-					boolean remove = this.api.getDataManager().getKarmaDB().removeKarma(nomgroupe);
-					if (remove) {
-						sender.sendMessage("§6Le karma §2"+nomgroupe+" §6vient d'être suprimer !");
-						api.getDataManager().getKarmaDB().getKarmaList().remove(nomgroupe);
-					} else {
-						sender.sendMessage("§6Le karma ne peut être remove ou n'existe pas !");
-					}
-				} else {
-					sender.sendMessage("§cLes arguments de la commande sont inexistant ou incomplet !");
-					sendCommandInfo(sender);
-				}
-			} else {
-				sender.sendMessage("§cLes arguments de la commande sont inexistant ou incomplet !");
-				sendCommandInfo(sender);
-			}
+        if (args.length == 0) {
+            sendHelp(sender);
+            return true;
+        } else if (args.length == 1) {
+            if (args[0].equalsIgnoreCase("list")) {
+                sender.sendMessage("§aListe des rangs:");
+                sender.sendMessage("§7guide, builder, administrateur, moderateur, respcomm, developpeur, gerant, respbuild, graphiste, youtuber, streamer, developpeurweb");
+                sender.sendMessage("§aListe des rangs boutique:");
+                sender.sendMessage("§7or, diamant, emeraude");
+                return true;
+            }
+            String pseudo = args[0];
+            try {
+                Player player = (Player) Bukkit.getOfflinePlayer(pseudo);
+                PlayerInfo pInfo;
+                if (player.isOnline()) {
+                    pInfo = PlayerInfo.get(player);
+                } else {
+                    pInfo = new PlayerInfo(player);
+                }
+                String grade = pInfo.getRank();
+                int permlevel = pInfo.getMaxPermLevel();
+                sender.sendMessage("§a" + player.getName() + "§f est §a" + grade + "§f avec un perm-level de §a " + permlevel);
+                if (!pInfo.getKarmaRank().equals("player")) {
+                    sender.sendMessage("§a" + player.getName() + "§f possède le grade boutique §a" + pInfo.getKarmaRank());
+                }
+                return true;
+            } catch (Exception e) {
+                sender.sendMessage("§cLe joueur sélectionné n'éxiste pas !");
+            }
+        } else if (args.length >= 3) {
+            try {
+                String pseudo = args[0];
+                Player player = (Player) Bukkit.getOfflinePlayer(pseudo);
+                String option = args[1];
+                if (option.equalsIgnoreCase("set")) {
+                    String rankname = args[2].toLowerCase();
+                    if (rankname.equalsIgnoreCase("player")) {
+                        sender.sendMessage("§aSouhaitez vous dérank un joueur? Utilisez '/rank <pseudo> remove' à la place !");
+                        return true;
+                    }
+                    boolean isFemale = false;
+                    if (args.length > 3) {
+                        if (args[3].toLowerCase().startsWith("f")) {
+                            isFemale = true;
+                        }
+                    }
+                    if (this.api.getDataManager().getRankSystemDB().getRankList().containsKey(rankname)) {
+                        if (sender instanceof Player) {
+                            Player staff = (Player) sender;
+                            PlayerInfo staffInfo = PlayerInfo.get(staff);
+                            boolean god = false;
+                            if (staffInfo.getMaxPermLevel() >= 100) {
+                                god = true;
+                            }
+                            if (!hasPermission(staffInfo.getRank(), rankname, god)) {
+                                staff.sendMessage("§cVous n'avez pas la permission de donner ce grade.");
+                                return true;
+                            }
+                        }
+                        if (sender instanceof Player) {
+                            if (getPcordRank(rankname) != null) {
+                                this.api.runBungeeConsoleCommand((Player) sender, "pcord user " + player.getName() + " group set " + getPcordRank(rankname));
+                            }
+                        } else {
+                            Player randomPlayer = (Player) Bukkit.getOnlinePlayers().toArray()[0];
+                            if (randomPlayer == null) {
+                                sender.sendMessage("§cImpossible de donner un grade via la console, aucun joueur n'est connecté pour faire la liaison Bungee.");
+                                return true;
+                            }
+                            if (getPcordRank(rankname) != null) {
+                                this.api.runBungeeConsoleCommand(randomPlayer, "pcord user " + player.getName() + " group set " + getPcordRank(rankname));
+                            }
+                        }
+                        this.api.getDataManager().getPlayerDB().setRankPlayer(player, rankname, isFemale);
+                        sender.sendMessage("§aVous avez donné le grade §2" + rankname + " §aà§2 " + player.getName());
+                        if (player.isOnline()) {
+                            if (isFemale) {
+                                player.sendMessage("§aVous avez reçue le grade §2" + rankname + " §a!");
+                            } else {
+                                player.sendMessage("§aVous avez reçu le grade §2" + rankname + " §a!");
+                            }
+                            PlayerInfo pInfo = PlayerInfo.get(player);
+                            pInfo.rank = rankname;
+                            pInfo.rankPermLevel = api.getDataManager().getRankSystemDB().getRankList().get(rankname);
+                            pInfo.isFemale = isFemale;
+                        }
+                    } else {
+                        sender.sendMessage("§cLe grade '" + rankname + "' est introuvable. Utilisez '/rank list' pour obtenir la liste des grades.");
+                    }
+                    return true;
+                } else if (option.equalsIgnoreCase("setpaid")) {
+                    String rankname = args[2];
+                    if (this.api.getDataManager().getKarmaDB().getKarmaList().containsKey(rankname)) {
+                        if (sender instanceof Player) {
+                            Player staff = (Player) sender;
+                            PlayerInfo staffInfo = PlayerInfo.get(staff);
+                            boolean god = false;
+                            if (staffInfo.getMaxPermLevel() >= 100) {
+                                god = true;
+                            }
+                            if (!hasPermission(staffInfo.getRank(), rankname, god)) {
+                                staff.sendMessage("§cVous n'avez pas la permission de donner ce grade.");
+                                return true;
+                            }
+                        }
+                        this.api.getDataManager().getPlayerDB().setKarmaPlayer(player, rankname);
+                        sender.sendMessage("§aVous avez ajouté le grade boutique §2" + rankname + "§a à §2" + player.getName());
+                        if (player.isOnline()) {
+                            PlayerInfo pInfo = PlayerInfo.get(player);
+                            if (pInfo.isFemale) {
+                                player.sendMessage("§aVous avez reçue le grade §2" + rankname + " §a!");
+                            } else {
+                                player.sendMessage("§aVous avez reçu le grade §2" + rankname + " §a!");
+                            }
+                            pInfo.karma = rankname;
+                        }
+                    } else {
+                        sender.sendMessage("§cLe karma choisit n'existe pas !");
+                    }
+                    return true;
+                } else if (option.equalsIgnoreCase("remove")) {
+                    if (sender instanceof Player) {
+                        Player staff = (Player) sender;
+                        PlayerInfo staffInfo = PlayerInfo.get(staff);
+                        boolean god = false;
+                        if (staffInfo.getMaxPermLevel() >= 100) {
+                            god = true;
+                        }
+                        if (!hasPermission(staffInfo.getRank(), PlayerInfo.get(player).getRank(), god)) {
+                            staff.sendMessage("§cVous n'avez pas la permission de retirer ce grade.");
+                            return true;
+                        }
+                    }
+                    if (sender instanceof Player) {
+                        this.api.runBungeeConsoleCommand((Player) sender, "pcord user " + player.getName() + " delete");
+                    } else {
+                        Player randomPlayer = (Player) Bukkit.getOnlinePlayers().toArray()[0];
+                        if (randomPlayer == null) {
+                            sender.sendMessage("§cImpossible de retirer un grade via la console, aucun joueur n'est connecté pour faire la liaison Bungee.");
+                            return true;
+                        }
+                        this.api.runBungeeConsoleCommand(randomPlayer, "pcord user " + player.getName() + " delete");
+                    }
+                    this.api.getDataManager().getPlayerDB().setRankPlayer(player, "player", false);
+                    if (player.isOnline()) {
+                        player.kickPlayer("§cVotre grade vous à été enlevé, vous pouvez désormais vous reconnecter.");
+                    }
+                    return true;
+                } else if (option.equalsIgnoreCase("removepaid")) {
+                    if (PlayerInfo.get(player).getKarmaRank().equalsIgnoreCase("player")) {
+                        sender.sendMessage("§cCe joueur ne possède pas de grade boutique.");
+                        return true;
+                    }
+                    if (sender instanceof Player) {
+                        Player staff = (Player) sender;
+                        PlayerInfo staffInfo = PlayerInfo.get(staff);
+                        boolean god = false;
+                        if (staffInfo.getMaxPermLevel() >= 100) {
+                            god = true;
+                        }
+                        if (!hasPermission(staffInfo.getRank(), PlayerInfo.get(player).getKarmaRank(), god)) {
+                            staff.sendMessage("§cVous n'avez pas la permission de retirer ce grade boutique.");
+                            return true;
+                        }
+                    }
+                    this.api.getDataManager().getPlayerDB().deleteKarmaPlayer(player);
+                    if (player.isOnline()) {
+                        player.kickPlayer("§cVotre grade boutique vous à été enlevé, vous pouvez désormais vous reconnecter.");
+                    }
+                    return true;
+                } else {
+                    sendHelp(sender);
+                    return true;
+                }
+            } catch (Exception e) {
+                sender.sendMessage("§cLe joueur sélectionné n'éxiste pas !");
+            }
+        }
+        return true;
+    }
 
-		} else if (args.length == 4) {
-			String parametre1 = args[0];
-			if (parametre1.equalsIgnoreCase("GROUPE")) {
-				String nomgroupe = args[1];
-				String parametre2 = args[2];
-				if (parametre2.equalsIgnoreCase("setdefaultlevel")) {
-					try {
-						int level = Integer.valueOf(args[3]);
-						boolean change = this.api.getDataManager().getRankSystemDB().setdefaultlevel(1, nomgroupe, level);
-						if (change) {
-							sender.sendMessage("§6Le grade §2"+nomgroupe+" §6a maintenant la perm level a §2"+level);
-						} else {
-							sender.sendMessage("§6Le grade §2"+nomgroupe+" §6ne peut être modifier ou n'existe pas !");
-						}
-					} catch (Exception e) {
-						sender.sendMessage("§cLes arguments de la commande sont inexistant ou incomplet !");
-						sendCommandInfo(sender);
-					}
-				} else {
-					sender.sendMessage("§cLes arguments de la commande sont inexistant ou incomplet !");
-					sendCommandInfo(sender);
-				}
-			} else if (parametre1.equalsIgnoreCase("KARMA")) {
-				String nomgroupe = args[1];
-				String parametre2 = args[2];
-				
-				if (parametre2.equalsIgnoreCase("setdefaultlevel")) {
-					try {
-						int level = Integer.valueOf(args[3]);
-						boolean change = this.api.getDataManager().getRankSystemDB().setdefaultlevel(2, nomgroupe, level);
-						if (change) {
-							sender.sendMessage("§6Le karma §2"+nomgroupe+" §6a maintenant la perm level a §2"+level);
-						} else {
-							sender.sendMessage("§6Le karma §2"+nomgroupe+" §6ne peut être modifier ou n'existe pas !");
-						}
-					} catch (Exception e){
-						sender.sendMessage("§cLes arguments de la commande sont inexistant ou incomplet !");
-						sendCommandInfo(sender);
-					}
-				} else {
-					sender.sendMessage("§cLes arguments de la commande sont inexistant ou incomplet !");
-					sendCommandInfo(sender);
-				}
-			} else {
-				sender.sendMessage("§cLes arguments de la commande sont inexistant ou incomplet !");
-				sendCommandInfo(sender);
-			}
+    private void sendHelp(CommandSender sender) {
+        sender.sendMessage("§a/rank <pseudo> set <grade> [m/f] §7Définir le grade d'un joueur. m/f signifie le sexe");
+        sender.sendMessage("§a/rank <pseudo> setpaid <grade> §7Définir le grade boutique d'un joueur.");
+        sender.sendMessage("§a/rank <pseudo> remove §7Retirer le grade d'un joueur.");
+        sender.sendMessage("§a/rank <pseudo> removepaid §7Retirer le grade boutique d'un joueur.");
+        sender.sendMessage("§a/rank list §7Affiche la liste des grades pour le format commande.");
+    }
 
-		} else if (args.length == 5) {
-			String parametre1 = args[0];
-			if (parametre1.equalsIgnoreCase("GROUPE")) {
-				String nomgroupe = args[1];
-				String parametre2 = args[2];
-				if (parametre2.equalsIgnoreCase("add")) {
-					int defaultranklevel = Integer.valueOf(args[3]);
-					boolean create = this.api.getDataManager().getRankSystemDB().addnewRank(nomgroupe, defaultranklevel);
-					
-					if (create) {
-						sender.sendMessage("§6Vous avez add le grade §2"+nomgroupe+" §6avec la perm level § §2"+defaultranklevel);
-						api.getDataManager().getRankSystemDB().getRankList().put(nomgroupe, defaultranklevel);
-					} else {
-						sender.sendMessage("§6Le grade ne peut §tre rajouter ou existe déjà !");
-					}
-				} else {
-					sender.sendMessage("§cLes arguments de la commande sont inexistant ou incomplet !");
-					sendCommandInfo(sender);
-				}
-			} else if (parametre1.equalsIgnoreCase("KARMA")){
-				String nomgroupe = args[1];
-				String parametre2 = args[2];
-				if (parametre2.equalsIgnoreCase("add")) {
-					if (args.length == 5) {
-						int defaultranklevel = Integer.valueOf(args[3]);
-						boolean create = this.api.getDataManager().getKarmaDB().addnewKarma(nomgroupe, defaultranklevel);
+    private boolean hasPermission(String rank, String targetRank, boolean god) {
+        if (god || rank.equalsIgnoreCase("administrateur")) {
+            return true;
+        } else if (rank.equalsIgnoreCase("respbuild")) {
+            if (targetRank.equalsIgnoreCase("builder")) {
+                return true;
+            }
+        } else if (rank.equalsIgnoreCase("gerant")) {
+            if (targetRank.equalsIgnoreCase("guide") || targetRank.equalsIgnoreCase("moderateur")) {
+                return true;
+            }
+        } else if (rank.equalsIgnoreCase("respcomm")) {
+            if (targetRank.equalsIgnoreCase("youtuber") || targetRank.equalsIgnoreCase("streamer") || targetRank.equalsIgnoreCase("or") || targetRank.equalsIgnoreCase("diamant") || targetRank.equalsIgnoreCase("emeraude")) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-						if (create) {
-							sender.sendMessage("§6Vous avez add le karma §2"+nomgroupe+" §6avec la perm level à §2"+defaultranklevel);
-							api.getDataManager().getKarmaDB().getKarmaList().put(nomgroupe, defaultranklevel);
-						} else {
-							sender.sendMessage("§6Le karma ne peut être rajouter ou existe déjà !");
-						}
-					} else {
-						sender.sendMessage("§cLes arguments de la commande sont inexistant ou incomplet !");
-						sendCommandInfo(sender);
-					}
-				}
-			} else if(parametre1.equalsIgnoreCase("PLAYER")) {
-				String pseudo = args[1];
-				try {
-					Player player = (Player) Bukkit.getOfflinePlayer(pseudo);
-					String parametre2 = args[2];
-					
-					if (parametre2.equalsIgnoreCase("setrank")) {
-						String rankname = args[3];
-						String female = args[4];
-						if (female.equalsIgnoreCase("true") || female.equalsIgnoreCase("false")) {
-							boolean isFemale = Boolean.parseBoolean(female);
-							if (this.api.getDataManager().getRankSystemDB().getRankList().containsKey(rankname)) {
-								this.api.getDataManager().getPlayerDB().setRankPlayer(player, rankname, isFemale);
-								if (sender instanceof Player)
-									sender.sendMessage("§6Vous avez ajouter le grade §2"+rankname+" §6a§2 "+player.getName());
-								if (player.isOnline()) {
-									player.sendMessage(ChatColor.GREEN + "Vous avez reçu le grade " + rankname + "!");
-									PlayerInfo pInfo = PlayerInfo.get(player);
-									pInfo.rank = rankname;
-									pInfo.rankPermLevel = api.getDataManager().getRankSystemDB().getRankList().get(rankname);
-									pInfo.isFemale = isFemale;
-								}
-							} else {
-								sender.sendMessage("§cLe rank choisit n'existe pas !");
-							}
-						}
-					} else if(parametre2.equalsIgnoreCase("setkarma")) {
-						String rankname = args[3];
-						if (this.api.getDataManager().getKarmaDB().getKarmaList().containsKey(rankname)) {
-							this.api.getDataManager().getPlayerDB().setKarmaPlayer(player, rankname);
-							sender.sendMessage("§6Vous avez ajouter le karma §2"+rankname+" §6a§2 "+player.getName());
-							if (player.isOnline()) {
-								player.sendMessage(ChatColor.GREEN + "Vous avez reçu le grade " + rankname + "!");
-								PlayerInfo pInfo = PlayerInfo.get(player);
-								pInfo.karma = rankname;
-							}
-						} else {
-							sender.sendMessage("§cLe karma choisit n'existe pas !");
-						}
-					} else if (parametre2.equalsIgnoreCase("setPermLevel")) {
-						int setPermLevel = Integer.parseInt(args[3]);
-						if (api.getDataManager().getPlayerDB().isInsert(player)) {
-							api.getDataManager().getPlayerDB().setPlayerPermLevel(player, setPermLevel);
-							sender.sendMessage(ChatColor.GREEN + "Level permission ajouté !");
-							if (player.isOnline()) {
-								PlayerInfo.get(player).permLevel = setPermLevel;
-							}
-							return true;
-						}
-					} else if (parametre2.equalsIgnoreCase("delrank")) {
-						this.api.getDataManager().getPlayerDB().setRankPlayer(player, "player", false);
-
-						if (sender instanceof Player)
-							api.runBungeeConsoleCommand((Player) sender, "pcord user " + player + " delete");
-						else 
-							sender.sendMessage(ChatColor.RED + "Il faut retirer les permissions depuis le jeu ! Le changement a été effectué, mais il lui reste les perms de modération");
-
-						if (player.isOnline()) {
-							player.sendMessage(ChatColor.GREEN + "Vous avez perdu votre grade !");
-							PlayerInfo pInfo = PlayerInfo.get(player);
-							pInfo.rank = "player";
-							pInfo.permLevel = 0;
-						}
-					} else if (parametre2.equalsIgnoreCase("delkarma")) {
-						this.api.getDataManager().getPlayerDB().deleteKarmaPlayer(player);
-
-						if (player.isOnline()) {
-							player.sendMessage(ChatColor.GREEN + "Vous avez perdu votre grade !");
-							PlayerInfo pInfo = PlayerInfo.get(player);
-							pInfo.karma = "player";
-						}
-					} else {
-						sender.sendMessage("§cLes arguments de la commande sont inexistant ou incomplet !");
-						sendCommandInfo(sender);
-					}
-				} catch (Exception e) {
-					sender.sendMessage("§cLe joueur sélectionner n'existe pas !");
-				}
-			}
-		} else {
-			sender.sendMessage("§cLes arguments de la commande sont inexistant ou incomplet !");
-			sendCommandInfo(sender);
-		}
-		return false;
-	}
-
-	private void sendCommandInfo(CommandSender sender) {
-		if (sender instanceof Player) {
-			sender.sendMessage("§6============== §2Grade  :  Help §6==============");
-			sender.sendMessage("§2/grade PLAYER 'pseudo' §6:Connaitre le grade et la perme level d'un joueur !");
-			sender.sendMessage("§2/grade PLAYER 'pseudo' setrank/setkarma 'nom du grade' true/false (Fille ou non) §6: Modifier le grade d'un jouer !");
-			sender.sendMessage("§2/grade PLAYER 'pseudo' delrank/delkarma §6: retirer le grade d'un jouer !");
-			sender.sendMessage("§2/grade GROUPE/KARMA 'nom groupe' setprefix 'prefix' §6:Redéfinire le prefix d'un grade !");
-			sender.sendMessage("§2/grade GROUPE/KARMA 'nom groupe' setdefaultlevel 'level' §6:Redéfinire la perm level d'un grade !");
-			sender.sendMessage("§2/grade GROUPE/KARMA 'nom groupe' add 'leveldefault 'prefix' §6:Crée un nouveau grade !");
-			sender.sendMessage("§2/grade GROUPE/KARMA 'nom groupe' remove §6:Remove le grade !");
-			sender.sendMessage("§6========================================");
-		} else {
-			sender.sendMessage("§6============== §2Grade  :  Help §6==============");
-			sender.sendMessage("§2/grade PLAYER 'pseudo' §6:Connaitre le grade et la perme level d'un joueur !");
-			sender.sendMessage("§2/grade PLAYER 'pseudo' setrank/setkarma 'nom du grade' true/false (Fille ou non) §6: Modifier le grade d'un jouer !");
-			sender.sendMessage("§2/grade PLAYER 'pseudo' delrank/delkarma §6: retirer le grade d'un jouer !");
-			sender.sendMessage("§2/grade GROUPE/KARMA 'nom groupe' setprefix 'prefix' §6:Redéfinire le prefix d'un grade !");
-			sender.sendMessage("§2/grade GROUPE/KARMA 'nom groupe' setdefaultlevel 'level' §6:Redéfinire la perm level d'un grade !");
-			sender.sendMessage("§2/grade GROUPE/KARMA 'nom groupe' add 'leveldefault 'prefix' §6:Crée un nouveau grade !");
-			sender.sendMessage("§2/grade GROUPE/KARMA 'nom groupe' remove §6:Remove le grade !");
-			sender.sendMessage("§6============================================");
-		}
-	}
+    private String getPcordRank(String rank) {
+        if (rank.equalsIgnoreCase("builder") || rank.equalsIgnoreCase("graphiste")) {
+            return "staff";
+        } else if (rank.equalsIgnoreCase("guide")) {
+            return "guide";
+        } else if (rank.equalsIgnoreCase("moderateur")) {
+            return "moderateur";
+        } else if (rank.equalsIgnoreCase("gerant") || rank.equalsIgnoreCase("respbuild") || rank.equalsIgnoreCase("respcomm")) {
+            return "gerant";
+        } else if (rank.equalsIgnoreCase("administrateur") || rank.equalsIgnoreCase("developpeur") || rank.equalsIgnoreCase("developpeurweb")) {
+            return "admin";
+        } else {
+            return null;
+        }
+    }
 }

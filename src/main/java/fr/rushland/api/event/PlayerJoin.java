@@ -57,24 +57,29 @@ public class PlayerJoin implements Listener{
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerLogin(final PlayerLoginEvent event) {
-        final Player player = event.getPlayer();
-        if (!api.getDataManager().getPlayerDB().isInsert(player)) {
-            api.getDataManager().getPlayerDB().playerInit(player);
-        }
-        PlayerInfo playerInfo = new PlayerInfo(player);
+        Bukkit.getScheduler().runTaskAsynchronously(this.api.getRushland(), new Runnable() {
+            @Override
+            public void run() {
+                final Player player = event.getPlayer();
+                if (!api.getDataManager().getPlayerDB().isInsert(player)) {
+                    api.getDataManager().getPlayerDB().playerInit(player);
+                }
+                PlayerInfo playerInfo = new PlayerInfo(player);
 
-        if (event.getResult() == PlayerLoginEvent.Result.KICK_WHITELIST) {
-            if (playerInfo.getMaxPermLevel() > 0) {
-                event.setResult(PlayerLoginEvent.Result.ALLOWED);
-            } else {
-                playerInfo.remove();
+                if (event.getResult() == PlayerLoginEvent.Result.KICK_WHITELIST) {
+                    if (playerInfo.getMaxPermLevel() > 0) {
+                        event.setResult(PlayerLoginEvent.Result.ALLOWED);
+                    } else {
+                        playerInfo.remove();
+                    }
+                } else if (event.getResult() == PlayerLoginEvent.Result.KICK_FULL) {
+                    if (!playerInfo.getKarmaRank().equals("player") || !playerInfo.getRank().equals("player")) {
+                        event.setResult(PlayerLoginEvent.Result.ALLOWED);
+                    } else {
+                        playerInfo.remove();
+                    }
+                }
             }
-        } else if (event.getResult() == PlayerLoginEvent.Result.KICK_FULL) {
-            if (!playerInfo.getKarmaRank().equals("player") || !playerInfo.getRank().equals("player")) {
-                event.setResult(PlayerLoginEvent.Result.ALLOWED);
-            } else {
-                playerInfo.remove();
-            }
-        }
+        });
     }
 }

@@ -27,23 +27,23 @@ public class RedisDataSender {
     }
 
     public static void sendData() {
-		String key = serverId + ports;
-		String value = ports + "#" + motd  + "#" + Bukkit.getServer().getOnlinePlayers().size() + "#" + Bukkit.getServer().getMaxPlayers();
-		Jedis jedis = JedisFactory.getInstance().getJedisPool().getResource();
-		jedis.set(key, value);
-		jedis.expire(key, 2);
-		jedis.close();
-	}
+        String key = serverId + ports;
+        String value = ports + "#" + motd  + "#" + Bukkit.getServer().getOnlinePlayers().size() + "#" + Bukkit.getServer().getMaxPlayers();
+        Jedis jedis = JedisFactory.getInstance().getJedisPool().getResource();
+        jedis.set(key, value);
+        jedis.expire(key, 2);
+        jedis.close();
+    }
 
-	public static void refreshTimer() {
-		Bukkit.getScheduler().runTaskLater(BukkitInjector.getApi().getRushland(), new Runnable() {
-			@Override
-			public void run() {
-				sendData();
-				refreshTimer();
-			}
-		}, 20L);
-	}
+    public static void refreshTimer() {
+        Bukkit.getScheduler().runTaskLater(BukkitInjector.getApi().getRushland(), new Runnable() {
+            @Override
+            public void run() {
+                sendData();
+                refreshTimer();
+            }
+        }, 20L);
+    }
 
 
     private static void subscribeChannels() {
@@ -59,7 +59,7 @@ public class RedisDataSender {
                     subscriberJedis.subscribe(subscriber, channelSub);
                     CodeUtils.logToConsole("Subscription ended.");
                 } catch (Exception e) {
-                   CodeUtils.logToConsole("Subscribing failed." );
+                    CodeUtils.logToConsole("Subscribing failed." );
                     e.printStackTrace();
                 }
 
@@ -69,7 +69,7 @@ public class RedisDataSender {
         final Jedis publisherJedis = JedisFactory.getInstance().getJedisPool().getResource();
 
         getPublisher = new Publisher(publisherJedis, channelSub);
-       // getPublisher.init();
+        // getPublisher.init();
 
     }
 }
