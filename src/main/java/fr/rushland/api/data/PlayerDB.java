@@ -4,10 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import fr.rushland.api.BukkitInjector;
 import fr.rushland.api.RushlandAPI;
 
 public class PlayerDB {
@@ -79,7 +77,14 @@ public class PlayerDB {
 
     public void setKarmaPlayer(Player player, String karma ) {
         try {
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE uuid = ?");
+            PreparedStatement pst;
+            if (karma.equalsIgnoreCase("diamant")) {
+                pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE uuid = ?");
+            } else if (karma.equalsIgnoreCase("emeraude")) {
+                pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 100 YEAR) WHERE uuid = ?");
+            } else {
+                pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE uuid = ?");
+            }
 
             pst.setString(1, karma);
             pst.setString(2, player.getUniqueId().toString());
