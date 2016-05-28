@@ -3,10 +3,8 @@ authors: [Aquazus, Zaral]
 main: fr.rushland.api.BukkitInjector
 version: ${project.version}
 commands:
-   money:
-      description: Money
    grade:
-      description: Grade
+      description: Commande de grade
       aliases: [rank]
    spec:
       description: spec
