@@ -106,11 +106,7 @@ public class RankCommand implements CommandExecutor {
                         this.api.getDataManager().getPlayerDB().setRankPlayer(player, rankname, isFemale);
                         sender.sendMessage("§aVous avez donné le grade §2" + rankname + " §aà§2 " + player.getName());
                         if (player.isOnline()) {
-                            if (isFemale) {
-                                player.sendMessage("§aVous avez reçue le grade §2" + rankname + " §a!");
-                            } else {
-                                player.sendMessage("§aVous avez reçu le grade §2" + rankname + " §a!");
-                            }
+                            player.sendMessage("§aVous avez reçu le grade §2" + rankname + " §a!");
                             PlayerInfo pInfo = PlayerInfo.get(player);
                             pInfo.rank = rankname;
                             pInfo.rankPermLevel = api.getDataManager().getRankSystemDB().getRankList().get(rankname);
@@ -139,11 +135,7 @@ public class RankCommand implements CommandExecutor {
                         sender.sendMessage("§aVous avez ajouté le grade boutique §2" + rankname + "§a à §2" + player.getName());
                         if (player.isOnline()) {
                             PlayerInfo pInfo = PlayerInfo.get(player);
-                            if (pInfo.isFemale) {
-                                player.sendMessage("§aVous avez reçue le grade §2" + rankname + " §a!");
-                            } else {
-                                player.sendMessage("§aVous avez reçu le grade §2" + rankname + " §a!");
-                            }
+                            player.sendMessage("§aVous avez reçu le grade §2" + rankname + " §a!");
                             pInfo.karma = rankname;
                         }
                     } else {
