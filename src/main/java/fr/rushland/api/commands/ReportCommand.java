@@ -20,7 +20,7 @@ public class ReportCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "Vous n'êtes pas autorisé à faire cette commande.");
             return true;
         }
