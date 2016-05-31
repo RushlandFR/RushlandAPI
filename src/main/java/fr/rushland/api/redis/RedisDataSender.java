@@ -31,7 +31,7 @@ public class RedisDataSender {
         String value = ports + "#" + motd  + "#" + Bukkit.getServer().getOnlinePlayers().size() + "#" + Bukkit.getServer().getMaxPlayers();
         Jedis jedis = JedisFactory.getInstance().getJedisPool().getResource();
         jedis.set(key, value);
-        jedis.expire(key, 2);
+        jedis.expire(key, 3);
         jedis.close();
     }
 
