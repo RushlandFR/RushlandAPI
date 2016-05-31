@@ -223,7 +223,7 @@ public class RankCommand implements CommandExecutor {
                 return true;
             }
         } else if (rank.equalsIgnoreCase("respcomm")) {
-            if (targetRank.equalsIgnoreCase("youtuber") || targetRank.equalsIgnoreCase("streamer") || targetRank.equalsIgnoreCase("or") || targetRank.equalsIgnoreCase("diamant") || targetRank.equalsIgnoreCase("emeraude")) {
+            if (targetRank.equalsIgnoreCase("youtuber") || targetRank.equalsIgnoreCase("streamer") || targetRank.equalsIgnoreCase("or") || targetRank.equalsIgnoreCase("diamant") || targetRank.equalsIgnoreCase("emeraude")  || targetRank.equalsIgnoreCase("graphiste")) {
                 return true;
             }
         }
