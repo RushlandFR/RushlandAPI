@@ -83,7 +83,7 @@ public class RushlandAPI {
     }
 
 	public void disable() {
-		RedisDataSender.getPublisher.publish("delete#" + RedisDataSender.serverId + "#" + RedisDataSender.ports);
+		RedisDataSender.getPublisher.publish(RedisDataSender.serverId + "#delete#" + RedisDataSender.ports);
 		this.datamanager.deconnection();
 	}
 
