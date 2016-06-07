@@ -4,6 +4,7 @@ package fr.rushland.api.data;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
@@ -168,6 +169,38 @@ public class Money {
                 PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = ? WHERE uuid = ?");
                 pst.setInt(1, setvalue);
                 pst.setString(2, player.getUniqueId().toString());
+
+                pst.executeUpdate();
+            } else {
+                return false;
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean setPlayermoney (UUID uuid, String moneyname, int setvalue) {
+        if (setvalue < 0) {
+            return true;
+        }
+        try {
+            if (!this.api.getDataManager().moneylist.contains(moneyname)) {
+                return false;
+            }
+            if (moneyname.equalsIgnoreCase("rushcoins")) {
+                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = ? WHERE uuid = ?");
+
+                pst.setInt(1, setvalue);
+                pst.setString(2, uuid.toString());
+
+                pst.executeUpdate();
+
+            } else if (moneyname.equalsIgnoreCase("shopcoins")) {
+                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = ? WHERE uuid = ?");
+                pst.setInt(1, setvalue);
+                pst.setString(2, uuid.toString());
 
                 pst.executeUpdate();
             } else {

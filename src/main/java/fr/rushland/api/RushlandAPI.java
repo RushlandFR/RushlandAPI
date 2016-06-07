@@ -23,97 +23,97 @@ import fr.rushland.api.utils.Config;
 
 public class RushlandAPI {
 
-	private BukkitInjector rushland;
+    private BukkitInjector rushland;
 
-	private DataManager datamanager;
-	private CommandManager commandemanager;
-	private Config config;
-	private EventManager eventmanager;
-	private ProtocolManager protocolManager;
+    private DataManager datamanager;
+    private CommandManager commandemanager;
+    private Config config;
+    private EventManager eventmanager;
+    private ProtocolManager protocolManager;
 
-	public ArrayList<PlayerInfo> playerList = new ArrayList<>();
+    public ArrayList<PlayerInfo> playerList = new ArrayList<>();
 
-	public RushlandAPI(BukkitInjector rushland){
+    public RushlandAPI(BukkitInjector rushland){
 
-		this.rushland = rushland;
-		this.config = new Config(this.rushland, this);
-		this.datamanager = new DataManager(this.rushland, this);
-		this.commandemanager = new CommandManager(this, this.rushland);
-		this.eventmanager = new EventManager(this.rushland,this);
+        this.rushland = rushland;
+        this.config = new Config(this.rushland, this);
+        this.datamanager = new DataManager(this.rushland, this);
+        this.commandemanager = new CommandManager(this, this.rushland);
+        this.eventmanager = new EventManager(this.rushland,this);
 
-	}
+    }
 
-	public BukkitInjector getRushland() {
-		return this.rushland;
-	}
-	public void enable() {
-		File logsFolder = new File("logs/");
-		File filesList[] = logsFolder.listFiles();
-		for (int i = 0; i < filesList.length; i++) {
-			String fileName = filesList[i].getName();
-			if (fileName.endsWith(".log.gz")) {
-				filesList[i].delete();
-			}
-		}
-		Bukkit.getMessenger().registerOutgoingPluginChannel(rushland, "ExecConsoleCmd");
-		Bukkit.getMessenger().registerOutgoingPluginChannel(rushland, "ExecPlayerCmd");
+    public BukkitInjector getRushland() {
+        return this.rushland;
+    }
+    public void enable() {
+        File logsFolder = new File("logs/");
+        File filesList[] = logsFolder.listFiles();
+        for (int i = 0; i < filesList.length; i++) {
+            String fileName = filesList[i].getName();
+            if (fileName.endsWith(".log.gz")) {
+                filesList[i].delete();
+            }
+        }
+        Bukkit.getMessenger().registerOutgoingPluginChannel(rushland, "ExecConsoleCmd");
+        Bukkit.getMessenger().registerOutgoingPluginChannel(rushland, "ExecPlayerCmd");
 
-		this.commandemanager.load();
-		this.config.initConf();
-		this.datamanager.connection();
-		this.datamanager.initData();
-		this.eventmanager.registerEvent();
-		this.getDataManager().moneylist.add("shopcoins");
-		this.getDataManager().moneylist.add("rushcoins");
+        this.commandemanager.load();
+        this.config.initConf();
+        this.datamanager.connection();
+        this.datamanager.initData();
+        this.eventmanager.registerEvent();
+        this.getDataManager().moneylist.add("shopcoins");
+        this.getDataManager().moneylist.add("rushcoins");
 
-		protocolManager = ProtocolLibrary.getProtocolManager();
+        protocolManager = ProtocolLibrary.getProtocolManager();
 
-		protocolManager.addPacketListener(new PacketAdapter(rushland, ListenerPriority.NORMAL, PacketType.Play.Client.TAB_COMPLETE) {
-			@Override
-			public void onPacketReceiving(PacketEvent event) {
-				if (event.getPacketType() == PacketType.Play.Client.TAB_COMPLETE) {
-						event.setCancelled(true);
-				}
-			}
-		});
-	}
+        protocolManager.addPacketListener(new PacketAdapter(rushland, ListenerPriority.NORMAL, PacketType.Play.Client.TAB_COMPLETE) {
+            @Override
+            public void onPacketReceiving(PacketEvent event) {
+                if (event.getPacketType() == PacketType.Play.Client.TAB_COMPLETE) {
+                    event.setCancelled(true);
+                }
+            }
+        });
+    }
 
     public ProtocolManager getProtocolManager() {
         return this.protocolManager;
     }
 
-	public void disable() {
-		RedisDataSender.getPublisher.publish(RedisDataSender.serverId + "#delete#" + RedisDataSender.ports);
-		this.datamanager.deconnection();
-	}
+    public void disable() {
+        RedisDataSender.getPublisher.publish(RedisDataSender.serverId + "#delete#" + RedisDataSender.ports);
+        this.datamanager.deconnection();
+    }
 
 
-	public void runBungeeConsoleCommand(Player player, String command) {
-		player.sendPluginMessage(rushland, "ExecConsoleCmd", command.getBytes(Charsets.UTF_8));
-	}
+    public void runBungeeConsoleCommand(Player player, String command) {
+        player.sendPluginMessage(rushland, "ExecConsoleCmd", command.getBytes(Charsets.UTF_8));
+    }
 
-	public void runBungeePlayerCommand(Player player, String command) {
-		String name = player.getName();
-		String pluginMessage = name + "#" + command;
-		player.sendPluginMessage(rushland, "ExecPlayerCmd", pluginMessage.getBytes(Charsets.UTF_8));
-	}
+    public void runBungeePlayerCommand(Player player, String command) {
+        String name = player.getName();
+        String pluginMessage = name + "#" + command;
+        player.sendPluginMessage(rushland, "ExecPlayerCmd", pluginMessage.getBytes(Charsets.UTF_8));
+    }
 
-	public DataManager getDataManager() {
-		return this.datamanager;
-	}
-	
-	
+    public DataManager getDataManager() {
+        return this.datamanager;
+    }
 
-	public PlayerInfo getPlayerInfo(Player player) {
-		return PlayerInfo.get(player);
-	}
 
-	public CommandManager getCommandeManager() {
-		return this.commandemanager;
-	}
-	public ArrayList<PlayerInfo> getPlayerList() {
-		return this.playerList;
-	}
+
+    public PlayerInfo getPlayerInfo(Player player) {
+        return PlayerInfo.get(player);
+    }
+
+    public CommandManager getCommandeManager() {
+        return this.commandemanager;
+    }
+    public ArrayList<PlayerInfo> getPlayerList() {
+        return this.playerList;
+    }
 
 
 }

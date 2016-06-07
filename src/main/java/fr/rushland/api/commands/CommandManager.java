@@ -20,5 +20,6 @@ public class CommandManager {
         this.rushland.getCommand("tp").setExecutor(new TpCommand(this.api));
         this.rushland.getCommand("leave").setExecutor(new LeaveCommand(this.api));
         this.rushland.getCommand("aacautoreport").setExecutor(new ReportCommand(this.api));
+        this.rushland.getCommand("rlshop").setExecutor(new RlshopCommand(this.api));
     }
 }
