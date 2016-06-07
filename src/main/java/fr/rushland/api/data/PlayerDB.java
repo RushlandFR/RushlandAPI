@@ -45,7 +45,7 @@ public class PlayerDB {
         }
         return null;
     }
-    
+
     public ResultSet getPlayerInfo(UUID uuid) {
         try {
             PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT *, NOW() as now FROM PlayerInfo WHERE uuid = ?");
@@ -89,19 +89,17 @@ public class PlayerDB {
             e.printStackTrace();
         }
     }
-    
+
     public void setRankPlayer(UUID uuid, String rank, boolean isFemale) {
         try {
-            if (this.api.getDataManager().getRankSystemDB().isRankExist(rank)) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerRank = ?, rankFemale = ? WHERE uuid = ?");
+            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerRank = ?, rankFemale = ? WHERE uuid = ?");
 
-                pst.setString(1, rank);
-                pst.setBoolean(2, isFemale);
-                pst.setString(3, uuid.toString());
+            pst.setString(1, rank);
+            pst.setBoolean(2, isFemale);
+            pst.setString(3, uuid.toString());
 
-                pst.executeUpdate();
-                pst.close();
-            }
+            pst.executeUpdate();
+            pst.close();
         } catch (SQLException e){
             e.printStackTrace();
         }
@@ -126,7 +124,7 @@ public class PlayerDB {
             e.printStackTrace();
         }
     }
-    
+
     public void setKarmaPlayer(UUID uuid, String karma ) {
         try {
             PreparedStatement pst;
@@ -158,7 +156,7 @@ public class PlayerDB {
             e.printStackTrace();
         }
     }
-    
+
     public void deleteKarmaPlayer(UUID uuid) {
         try {
             PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = player, expire = null WHERE uuid = ?");

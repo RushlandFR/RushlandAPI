@@ -1,9 +1,5 @@
 package fr.rushland.api.commands;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -14,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import fr.rushland.api.RushlandAPI;
 import fr.rushland.api.data.PlayerInfo;
+import fr.rushland.api.utils.UUIDLib;
 
 public class RankCommand implements CommandExecutor {
 
@@ -46,40 +43,45 @@ public class RankCommand implements CommandExecutor {
                 return true;
             }
             String pseudo = args[0];
-            String uuid = getUUID(pseudo);
+            UUID uuid = UUIDLib.getID(pseudo);
             if (uuid == null) {
                 sender.sendMessage("§cLe joueur sélectionné n'éxiste pas !");
                 return true;
             }
             try {
-                Player player = Bukkit.getPlayer(UUID.fromString(uuid));
+                Player player = Bukkit.getPlayer(uuid);
                 PlayerInfo pInfo;
                 if (player != null) {
                     pInfo = PlayerInfo.get(player);
                 } else {
-                    pInfo = new PlayerInfo(UUID.fromString(uuid));
+                    pInfo = new PlayerInfo(uuid);
                 }
                 String grade = pInfo.getRank();
                 int permlevel = pInfo.getMaxPermLevel();
-                sender.sendMessage("§a" + pseudo + "§f est §a" + grade + "§f avec un perm-level de §a" + permlevel);
+                sender.sendMessage("§2" + pseudo + "§a est §2" + grade + "§a avec un perm-level de §2" + permlevel);
+                sender.sendMessage("§aL'UUID de §2" + pseudo + "§a est §2" + uuid.toString());
                 if (!pInfo.getKarmaRank().equals("player")) {
-                    sender.sendMessage("§a" + pseudo + "§f possède le grade boutique §a" + pInfo.getKarmaRank());
+                    sender.sendMessage("§2" + pseudo + "§a possède le grade boutique §2" + pInfo.getKarmaRank());
                 }
                 return true;
             } catch (Exception e) {
                 sender.sendMessage("§cLe joueur sélectionné n'éxiste pas !");
             }
-        } else if (args.length >= 3) {
+        } else if (args.length >= 2) {
             try {
                 String pseudo = args[0];
-                String uuid = getUUID(pseudo);
+                UUID uuid = UUIDLib.getID(pseudo);
                 if (uuid == null) {
                     sender.sendMessage("§cLe joueur sélectionné n'éxiste pas !");
                     return true;
                 }
-                Player player = Bukkit.getPlayer(UUID.fromString(uuid));
+                Player player = Bukkit.getPlayer(uuid);
                 String option = args[1];
                 if (option.equalsIgnoreCase("set")) {
+                    if (args.length < 3) {
+                        sender.sendMessage("§cUtilisation: /rank <pseudo> set <grade> [m/f]");
+                        return true;
+                    }
                     String rankname = args[2].toLowerCase();
                     if (rankname.equalsIgnoreCase("player") || rankname.equalsIgnoreCase("joueur") || rankname.equalsIgnoreCase("remove")) {
                         sender.sendMessage("§aSouhaitez vous dérank un joueur? Utilisez '/rank <pseudo> remove' à la place !");
@@ -118,8 +120,8 @@ public class RankCommand implements CommandExecutor {
                                 this.api.runBungeeConsoleCommand(randomPlayer, "pcord user " + pseudo + " group set " + getPcordRank(rankname));
                             }
                         }
-                        this.api.getDataManager().getPlayerDB().setRankPlayer(UUID.fromString(uuid), rankname, isFemale);
-                        sender.sendMessage("§aVous avez donné le grade §2" + rankname + " §aà§2 " + player.getName());
+                        this.api.getDataManager().getPlayerDB().setRankPlayer(uuid, rankname, isFemale);
+                        sender.sendMessage("§aVous avez donné le grade §2" + rankname + " §aà§2 " + pseudo);
                         if (player != null) {
                             PlayerInfo pInfo = PlayerInfo.get(player);
                             pInfo.rank = rankname;
@@ -132,6 +134,10 @@ public class RankCommand implements CommandExecutor {
                     }
                     return true;
                 } else if (option.equalsIgnoreCase("setpaid")) {
+                    if (args.length < 3) {
+                        sender.sendMessage("§cUtilisation: /rank <pseudo> setpaid <grade>");
+                        return true;
+                    }
                     String rankname = args[2];
                     if (this.api.getDataManager().getKarmaDB().getKarmaList().containsKey(rankname)) {
                         if (sender instanceof Player) {
@@ -146,7 +152,7 @@ public class RankCommand implements CommandExecutor {
                                 return true;
                             }
                         }
-                        this.api.getDataManager().getPlayerDB().setKarmaPlayer(UUID.fromString(uuid), rankname);
+                        this.api.getDataManager().getPlayerDB().setKarmaPlayer(uuid, rankname);
                         sender.sendMessage("§aVous avez ajouté le grade boutique §2" + rankname + "§a à §2" + player.getName());
                         if (player != null) {
                             PlayerInfo pInfo = PlayerInfo.get(player);
@@ -162,7 +168,7 @@ public class RankCommand implements CommandExecutor {
                     if (player != null) {
                         pInfo = PlayerInfo.get(player);
                     } else {
-                        pInfo = new PlayerInfo(UUID.fromString(uuid));
+                        pInfo = new PlayerInfo(uuid);
                     }
                     if (sender instanceof Player) {
                         Player staff = (Player) sender;
@@ -186,17 +192,18 @@ public class RankCommand implements CommandExecutor {
                         }
                         this.api.runBungeeConsoleCommand(randomPlayer, "pcord user " + pseudo + " delete");
                     }
-                    this.api.getDataManager().getPlayerDB().setRankPlayer(UUID.fromString(uuid), "player", false);
+                    this.api.getDataManager().getPlayerDB().setRankPlayer(uuid, "player", false);
                     if (player != null) {
                         player.kickPlayer("§cVotre grade vous à été enlevé, vous pouvez désormais vous reconnecter.");
                     }
+                    sender.sendMessage("§aVous avez enlevé le grade à §2" + pseudo);
                     return true;
                 } else if (option.equalsIgnoreCase("removepaid")) {
                     PlayerInfo pInfo;
                     if (player != null) {
                         pInfo = PlayerInfo.get(player);
                     } else {
-                        pInfo = new PlayerInfo(UUID.fromString(uuid));
+                        pInfo = new PlayerInfo(uuid);
                     }
                     if (pInfo.getKarmaRank().equalsIgnoreCase("player")) {
                         sender.sendMessage("§cCe joueur ne possède pas de grade boutique.");
@@ -214,7 +221,7 @@ public class RankCommand implements CommandExecutor {
                             return true;
                         }
                     }
-                    this.api.getDataManager().getPlayerDB().deleteKarmaPlayer(UUID.fromString(uuid));
+                    this.api.getDataManager().getPlayerDB().deleteKarmaPlayer(uuid);
                     if (player != null) {
                         player.kickPlayer("§cVotre grade boutique vous à été enlevé, vous pouvez désormais vous reconnecter.");
                     }
@@ -271,22 +278,5 @@ public class RankCommand implements CommandExecutor {
         } else {
             return null;
         }
-    }
-
-    private String getUUID(String playerName) {
-        String uuid = null;
-        try {
-            URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + playerName + "?");
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-            String line = reader.readLine();
-
-            String[] id = line.split(",");
-
-            uuid = id[0].substring(7, 39);
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-        return uuid;
     }
 }
