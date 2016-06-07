@@ -3,6 +3,7 @@ package fr.rushland.api.data;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
@@ -44,6 +45,20 @@ public class PlayerDB {
         }
         return null;
     }
+    
+    public ResultSet getPlayerInfo(UUID uuid) {
+        try {
+            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT *, NOW() as now FROM PlayerInfo WHERE uuid = ?");
+            pst.setString(1, uuid.toString());
+            pst.executeQuery();
+            ResultSet result = pst.getResultSet();
+            if (result.next())
+                return result;
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public void setPlayerPermLevel(Player player , int ranklevel){
         try {
@@ -74,6 +89,23 @@ public class PlayerDB {
             e.printStackTrace();
         }
     }
+    
+    public void setRankPlayer(UUID uuid, String rank, boolean isFemale) {
+        try {
+            if (this.api.getDataManager().getRankSystemDB().isRankExist(rank)) {
+                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerRank = ?, rankFemale = ? WHERE uuid = ?");
+
+                pst.setString(1, rank);
+                pst.setBoolean(2, isFemale);
+                pst.setString(3, uuid.toString());
+
+                pst.executeUpdate();
+                pst.close();
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 
     public void setKarmaPlayer(Player player, String karma ) {
         try {
@@ -94,12 +126,44 @@ public class PlayerDB {
             e.printStackTrace();
         }
     }
+    
+    public void setKarmaPlayer(UUID uuid, String karma ) {
+        try {
+            PreparedStatement pst;
+            if (karma.equalsIgnoreCase("diamant")) {
+                pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE uuid = ?");
+            } else if (karma.equalsIgnoreCase("emeraude")) {
+                pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 100 YEAR) WHERE uuid = ?");
+            } else {
+                pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE uuid = ?");
+            }
+
+            pst.setString(1, karma);
+            pst.setString(2, uuid.toString());
+            pst.executeUpdate();
+            pst.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 
     public void deleteKarmaPlayer(Player player) {
         try {
             PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = player, expire = null WHERE uuid = ?");
 
             pst.setString(1, player.getUniqueId().toString());
+            pst.executeUpdate();
+            pst.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void deleteKarmaPlayer(UUID uuid) {
+        try {
+            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = player, expire = null WHERE uuid = ?");
+
+            pst.setString(1, uuid.toString());
             pst.executeUpdate();
             pst.close();
         } catch (SQLException e) {

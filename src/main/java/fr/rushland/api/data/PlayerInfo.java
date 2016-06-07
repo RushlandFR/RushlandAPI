@@ -78,7 +78,36 @@ public class PlayerInfo {
         }
         api.playerList.add(this);
     }
-
+    
+    public PlayerInfo(UUID uuid) {
+        this.uuid = uuid;
+        ResultSet resultSet = api.getDataManager().getPlayerDB().getPlayerInfo(uuid);
+        try {
+            rank = resultSet.getString("playerRank");
+            karma = resultSet.getString("playerKarma");
+            permLevel = resultSet.getInt("permLevel");
+            rushcoins = resultSet.getInt("rushcoins");
+            shopcoins = resultSet.getInt("shopcoins");
+            if (!rank.equalsIgnoreCase("player")) {
+                if (api.getDataManager().getRankSystemDB().getRankList().containsKey(rank)) {
+                    rankPermLevel = api.getDataManager().getRankSystemDB().getRankList().get(rank);
+                }
+                isFemale = resultSet.getBoolean("rankFemale");
+            }
+            if (!karma.equalsIgnoreCase("player") && !karma.equalsIgnoreCase("emeraude")) {
+                expire = resultSet.getDate("expire");
+                now = resultSet.getDate("now");
+                if (expire.before(now)) {
+                    api.getDataManager().getPlayerDB().deleteKarmaPlayer(uuid);
+                    karma = "player";
+                }
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public int getMaxPermLevel() {
         if (permLevel > rankPermLevel) {
             return permLevel;
