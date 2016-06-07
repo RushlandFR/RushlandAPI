@@ -24,7 +24,7 @@ public class Money {
         return true;
     }
 
-    public boolean addPlayermoney (Player player, String moneyname, int addvalue) {
+    public boolean addPlayermoney(Player player, String moneyname, int addvalue) {
         try {
             if (!this.api.getDataManager().moneylist.contains(moneyname)) {
                 return false;

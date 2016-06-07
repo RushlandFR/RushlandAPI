@@ -37,22 +37,25 @@ public class PlayerJoin implements Listener{
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        final UUID uuid = player.getUniqueId();
-        Bukkit.getScheduler().runTaskLaterAsynchronously(rushland, new Runnable() {
+        UUID uuid = player.getUniqueId();
+        PlayerInfo pInfo = PlayerInfo.get(uuid);
+        Bukkit.getScheduler().runTaskAsynchronously(rushland, new Runnable() {
             @Override
             public void run() {
-                if (api.getPlayerList().contains(PlayerInfo.get(uuid))) {
-                    PlayerInfo pInfo = PlayerInfo.get(uuid);
-                    pInfo.remove();
-                }
                 RedisDataSender.sendData();
+                pInfo.remove();
             }
-        }, 20L);
+        });
     }
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        RedisDataSender.sendData();
+        Bukkit.getScheduler().runTaskAsynchronously(rushland, new Runnable() {
+            @Override
+            public void run() {
+                RedisDataSender.sendData();
+            }
+        });
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -67,13 +70,13 @@ public class PlayerJoin implements Listener{
                 PlayerInfo playerInfo = new PlayerInfo(player);
 
                 if (event.getResult() == PlayerLoginEvent.Result.KICK_WHITELIST) {
-                    if (playerInfo.getMaxPermLevel() > 0) {
+                    if (playerInfo.getMaxPermLevel() >= 10) {
                         event.setResult(PlayerLoginEvent.Result.ALLOWED);
                     } else {
                         playerInfo.remove();
                     }
                 } else if (event.getResult() == PlayerLoginEvent.Result.KICK_FULL) {
-                    if (!playerInfo.getKarmaRank().equals("player") || !playerInfo.getRank().equals("player")) {
+                    if (playerInfo.getMaxPermLevel() >= 10) {
                         event.setResult(PlayerLoginEvent.Result.ALLOWED);
                     } else {
                         playerInfo.remove();
