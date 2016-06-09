@@ -39,11 +39,13 @@ public class PlayerJoin implements Listener{
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
         PlayerInfo pInfo = PlayerInfo.get(uuid);
+        if (pInfo != null) {
+            pInfo.remove();
+        }
         Bukkit.getScheduler().runTaskAsynchronously(rushland, new Runnable() {
             @Override
             public void run() {
                 RedisDataSender.sendData();
-                pInfo.remove();
             }
         });
     }
