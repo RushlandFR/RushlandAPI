@@ -31,6 +31,21 @@ public class PlayerDB {
         }
         return insert;
     }
+    
+    public boolean isInsert(UUID uuid) {
+        boolean insert = false;
+        try {
+            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT id FROM PlayerInfo WHERE uuid = ?");
+            pst.setString(1, uuid.toString());
+            pst.executeQuery();
+            ResultSet result = pst.getResultSet();
+            insert = result.next();
+            pst.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return insert;
+    }
 
     public ResultSet getPlayerInfo(Player player) {
         try {

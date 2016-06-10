@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import fr.rushland.api.BukkitInjector;
@@ -22,6 +23,47 @@ public class Money {
     public boolean updateMoney(PlayerInfo pInfo) {
         setPlayermoney(pInfo.getPlayer(), "rushcoins", pInfo.getRushcoins());
         setPlayermoney(pInfo.getPlayer(), "shopcoins", pInfo.getShopcoins());
+        return true;
+    }
+    
+    public boolean addPlayermoney(UUID uuid, String moneyname, int addvalue) {
+        try {
+            if (!this.api.getDataManager().moneylist.contains(moneyname)) {
+                return false;
+            }
+            PlayerInfo pInfo = PlayerInfo.get(uuid);
+            Player target = Bukkit.getPlayer(uuid);
+            if (target != null) {
+                switch (moneyname) {
+                    case ("rushcoins"):
+                        pInfo.rushcoins += addvalue;
+                    break;
+                    case ("shopcoins"):
+                        pInfo.shopcoins += addvalue;
+                    break;
+                }
+            }
+            if (moneyname.equalsIgnoreCase("rushcoins")) {
+                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = rushcoins + ? WHERE uuid = ?");
+
+                pst.setDouble(1, addvalue);
+                pst.setString(2, uuid.toString());
+
+                pst.executeUpdate();
+                pst.close();
+            } else if (moneyname.equalsIgnoreCase("shopcoins")) {
+                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = shopcoins + ? WHERE uuid = ?");
+                pst.setInt(1, addvalue);
+                pst.setString(2, uuid.toString());
+                pst.executeUpdate();
+                pst.close();
+            } else {
+                return false;
+            }
+        } catch (SQLException exception){
+            exception.printStackTrace();
+            return false;
+        }
         return true;
     }
 
