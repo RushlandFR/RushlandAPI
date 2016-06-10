@@ -7,13 +7,17 @@ commands:
       description: Commande de grade
       aliases: [rank]
    spec:
-      description: spec
-      aliases: [spectator]
+      description: Passer en mode spectateur
+      aliases: [spectator, spectateur]
    tp:
-      description: Tp
+      description: Commande de teleportation
    aacautoreport:
-      description: aacautoreport
+      description: Commande de report RAT
    leave:
-      description: leave
+      description: Quitter la partie
    rlshop:
-      description: rlshop
+      description: Commande technique
+   addshopcoins:
+      description: Ajouter des ShopCoins
+   addrushcoins:
+      description: Ajouter des RushCoins
