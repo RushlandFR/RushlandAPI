@@ -11,11 +11,11 @@ import fr.rushland.api.RushlandAPI;
 import fr.rushland.api.data.PlayerInfo;
 import fr.rushland.api.utils.UUIDLib;
 
-public class AddShopCoinsCommands implements CommandExecutor {
+public class AddRushCoinsCommand implements CommandExecutor {
 
     private RushlandAPI api;
 
-    public AddShopCoinsCommands(RushlandAPI api) {
+    public AddRushCoinsCommand(RushlandAPI api) {
         this.api = api;
     }
     
@@ -37,20 +37,20 @@ public class AddShopCoinsCommands implements CommandExecutor {
                 return true;
             }
             if (!this.api.getDataManager().getPlayerDB().isInsert(uuid)) {
-                sender.sendMessage("§cCe joueur ne s'est jamais connecté sur Rushland, impossible d'ajouter les ShopCoins.");
+                sender.sendMessage("§cCe joueur ne s'est jamais connecté sur Rushland, impossible d'ajouter les RushCoins.");
                 return true;
             }
-            int shopcoins;
+            int rushcoins;
             try {
-                shopcoins = Integer.parseInt(args[1]);
+                rushcoins = Integer.parseInt(args[1]);
             } catch (NumberFormatException e) {
                 sender.sendMessage("§c" + args[1] + " n'est pas un nombre valide.");
                 return true;
             }
-            this.api.getDataManager().getMoneyAPI().addPlayermoney(uuid, "shopcoins", shopcoins);
-            sender.sendMessage("§aVous avez ajouté §2" + shopcoins + "§a ShopCoins à §2" + pseudo + "§a.");
+            this.api.getDataManager().getMoneyAPI().addPlayermoney(uuid, "rushcoins", rushcoins);
+            sender.sendMessage("§aVous avez ajouté §2" + rushcoins + "§a RushCoins à §2" + pseudo + "§a.");
         } else {
-            sender.sendMessage("§cUtilisation: /addshopcoins <pseudo> <quantité>");
+            sender.sendMessage("§cUtilisation: /addrushcoins <pseudo> <quantité>");
         }
         return true;
     }
