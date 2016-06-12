@@ -39,9 +39,14 @@ public class PlayerJoin implements Listener{
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
         PlayerInfo pInfo = PlayerInfo.get(uuid);
-        if (pInfo != null) {
-            pInfo.remove();
-        }
+        Bukkit.getScheduler().runTaskLater(rushland, new Runnable() {
+            @Override
+            public void run() {
+                if (pInfo != null) {
+                    pInfo.remove();
+                }
+            }
+        }, 20L);
         Bukkit.getScheduler().runTaskAsynchronously(rushland, new Runnable() {
             @Override
             public void run() {
