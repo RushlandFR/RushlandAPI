@@ -57,6 +57,7 @@ public class PlayerJoin implements Listener{
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent event) {
+        event.setJoinMessage(null);
         Bukkit.getScheduler().runTaskAsynchronously(rushland, new Runnable() {
             @Override
             public void run() {
