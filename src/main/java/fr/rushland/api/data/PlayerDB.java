@@ -31,7 +31,7 @@ public class PlayerDB {
         }
         return insert;
     }
-    
+
     public boolean isInsert(UUID uuid) {
         boolean insert = false;
         try {
@@ -159,7 +159,7 @@ public class PlayerDB {
             e.printStackTrace();
         }
     }
-    
+
     public void addMonth(UUID uuid) {
         try {
             PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET expire = DATE_ADD(expire, INTERVAL 31 DAY) WHERE uuid = ?");

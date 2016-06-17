@@ -16,10 +16,10 @@ public class LeaveCommand implements CommandExecutor {
     public LeaveCommand(RushlandAPI pl) {
         this.pl = pl;
     }
-    
+
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
-        	Player player = (Player) sender;
+            Player player = (Player) sender;
             pl.runBungeePlayerCommand(player, "hub");
         } else {
             sender.sendMessage(ChatColor.RED + "Player only");

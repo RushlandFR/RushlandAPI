@@ -1,12 +1,9 @@
 package fr.rushland.api.redis;
 
-
-
 import fr.rushland.api.BukkitInjector;
 import fr.rushland.api.utils.CodeUtils;
 import org.bukkit.Bukkit;
 import redis.clients.jedis.Jedis;
-
 
 public class RedisDataSender {
 

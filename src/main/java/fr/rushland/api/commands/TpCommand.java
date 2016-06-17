@@ -14,8 +14,8 @@ import fr.rushland.api.data.PlayerInfo;
 public class TpCommand implements CommandExecutor {
 
     @SuppressWarnings("unused")
-	private RushlandAPI api;
-    
+    private RushlandAPI api;
+
     public TpCommand(RushlandAPI api) {
         this.api = api;
     }

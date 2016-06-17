@@ -78,7 +78,7 @@ public class PlayerInfo {
         }
         api.playerList.add(this);
     }
-    
+
     public PlayerInfo(UUID uuid) {
         this.uuid = uuid;
         ResultSet resultSet = api.getDataManager().getPlayerDB().getPlayerInfo(uuid);
@@ -107,7 +107,7 @@ public class PlayerInfo {
             e.printStackTrace();
         }
     }
-    
+
     public int getMaxPermLevel() {
         if (permLevel > rankPermLevel) {
             return permLevel;

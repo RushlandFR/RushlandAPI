@@ -25,7 +25,7 @@ public class Money {
         setPlayermoney(pInfo.getPlayer(), "shopcoins", pInfo.getShopcoins());
         return true;
     }
-    
+
     public boolean addPlayermoney(UUID uuid, String moneyname, int addvalue) {
         try {
             if (!this.api.getDataManager().moneylist.contains(moneyname)) {
@@ -222,7 +222,7 @@ public class Money {
         }
         return true;
     }
-    
+
     public boolean setPlayermoney (UUID uuid, String moneyname, int setvalue) {
         if (setvalue < 0) {
             return true;

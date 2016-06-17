@@ -28,7 +28,7 @@ public class Inventories {
         item.setItemMeta(meta);
         return item;
     }
-    
+
     public Inventory createInv(Player owner, int size, String name) {
         return Bukkit.createInventory(owner, size, name);
     }

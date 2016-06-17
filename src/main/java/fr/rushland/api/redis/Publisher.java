@@ -24,7 +24,7 @@ public class Publisher {
             BukkitInjector.getApi().getRushland().getLogger().log(Level.SEVERE, "Failed to publish ", e);
         }
     }
-/*
+    /*
     public void init() {
         StringBuilder sb = new StringBuilder();
         sb.append("init");
@@ -37,5 +37,5 @@ public class Publisher {
         }
 
     }
-    */
+     */
 }

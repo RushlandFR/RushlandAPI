@@ -47,7 +47,7 @@ public class SpecCommand implements CommandExecutor {
         }
         return true;
     }
-    
+
     public void giveFly(Player player) {
         if (PlayerInfo.get(player).getMaxPermLevel() >= PermLevel.MODERATEUR.getLevel()) {
             player.setAllowFlight(true);

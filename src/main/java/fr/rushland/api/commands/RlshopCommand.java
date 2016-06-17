@@ -26,7 +26,7 @@ public class RlshopCommand implements CommandExecutor {
             sender.sendMessage("§cCommande introuvable.");
             return true;
         }
-        
+
         String action = args[0];
         UUID uuid = UUIDLib.getID(args[1]);
         if (uuid == null) {
@@ -41,15 +41,15 @@ public class RlshopCommand implements CommandExecutor {
             } else {
                 pInfo = new PlayerInfo(uuid);
             }
-            
+
             if (action.equalsIgnoreCase("rank")) {
                 String rank = args[2];
-                
+
                 if (pInfo.getKarmaRank().equalsIgnoreCase("emeraude")) {
                     this.api.getRushland().getLogger().severe("Transaction failed. Player is emerald. Data: " + action + " " + args[1] + " " + args[2]);
                     return true;
                 }
-                
+
                 if (pInfo.getKarmaRank().equalsIgnoreCase(rank)) {
                     this.api.getDataManager().getPlayerDB().addMonth(uuid);
                     if (player != null) {
@@ -62,7 +62,7 @@ public class RlshopCommand implements CommandExecutor {
                         player.kickPlayer("§aVous avez bien reçu votre grade §2" + rank);
                     }
                 }
-                
+
                 if (pInfo.getKarmaRank().equalsIgnoreCase("player")) {
                     pInfo.karma = rank;
                     this.api.getDataManager().getPlayerDB().setKarmaPlayer(uuid, rank);
@@ -74,7 +74,7 @@ public class RlshopCommand implements CommandExecutor {
                         this.api.getRushland().getLogger().severe("Transaction failed. Player is emerald. Data: " + action + " " + args[1] + " " + args[2]);
                         return true;
                     }
-                    
+
                 }
             } else if (action.equalsIgnoreCase("shopcoins")) {
                 int amount = Integer.parseInt(args[2]);
@@ -88,7 +88,7 @@ public class RlshopCommand implements CommandExecutor {
             this.api.getRushland().getLogger().severe("Transaction failed. Exception occured. Data: " + action + " " + args[1] + " " + args[2]);
             return true;
         }
-        
+
         return true;
     }
 }
