@@ -55,7 +55,7 @@ public class StatsDB {
         return false;
     }
 
-    public void insert(String uuid) {
+    public void addNewPlayer(String uuid) {
         try {
             PreparedStatement queryStatement = null;
             if (useKills && useWins) {
@@ -104,12 +104,26 @@ public class StatsDB {
                 queryStatement.close();
                 deaths.remove(uuid);
             }
+            
+            if (useWins && !wins.isEmpty() && wins.contains(uuid)) {
+                    PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("UPDATE stats_" + gameType + " SET wins = wins + 1 WHERE uuid = ?");
+                    queryStatement.setString(1, uuid);
+                    queryStatement.executeUpdate();
+                    queryStatement.close();
+            }
+            if (useLoses && !loses.isEmpty() && loses.contains(uuid)) {
+                    PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("UPDATE stats_" + gameType + " SET loses = loses + 1 WHERE uuid = ?");
+                    queryStatement.setString(1, uuid);
+                    queryStatement.executeUpdate();
+                    queryStatement.close();
+            }
+            clearPlayer(uuid);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void add() {
+    public void insert() {
         try {
             rushland.getLogger().info("Inserting stats into SQL Server...");
 
@@ -162,6 +176,21 @@ public class StatsDB {
             kills.put(uuid, oldKills + 1);
         } else {
             kills.put(uuid, 1);
+        }
+    }
+    
+    private void clearPlayer(String uuid) {
+        if (kills.containsKey(uuid)) {
+            kills.remove(uuid);
+        }
+        if (deaths.containsKey(uuid)) {
+            deaths.remove(uuid);
+        }
+        if (loses.contains(uuid)) {
+            loses.remove(uuid);
+        }
+        if (wins.contains(uuid)) {
+            wins.remove(uuid);
         }
     }
 
