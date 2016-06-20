@@ -55,7 +55,7 @@ public class StatsDB {
         return false;
     }
 
-    public void add(String uuid) {
+    public void insert(String uuid) {
         try {
             PreparedStatement queryStatement = null;
             if (useKills && useWins) {
@@ -109,7 +109,7 @@ public class StatsDB {
         }
     }
 
-    public void insert() {
+    public void add() {
         try {
             rushland.getLogger().info("Inserting stats into SQL Server...");
 
