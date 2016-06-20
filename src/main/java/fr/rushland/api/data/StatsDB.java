@@ -1,9 +1,3 @@
-/*
- * This file is subject to the terms and conditions defined in file 'LICENSE.txt'.
- * Copyright (C) 2016 by DOCQUIER B. and RUSHLAND . 
- * All right reserved.  
- */
-
 package fr.rushland.api.data;
 
 import java.sql.PreparedStatement;
@@ -160,5 +154,31 @@ public class StatsDB {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    
+    public void addKill(String uuid) {
+        if (kills.containsKey(uuid)) {
+            int oldKills = kills.get(uuid);
+            kills.put(uuid, oldKills + 1);
+        } else {
+            kills.put(uuid, 1);
+        }
+    }
+
+    public void addDeath(String uuid) {
+        if (deaths.containsKey(uuid)) {
+            int oldDeaths = deaths.get(uuid);
+            deaths.put(uuid, oldDeaths + 1);
+        } else {
+            deaths.put(uuid, 1);
+        }
+    }
+
+    public void addWin(String uuid) {
+        wins.add(uuid);
+    }
+
+    public void addLose(String uuid) {
+        loses.add(uuid);
     }
 }
