@@ -11,10 +11,9 @@ public class RedisDataSender {
     public static int ports;
     public static String channelSub = "RLGameManager";
     public static Publisher getPublisher = null;
-
     public static String motd = "§cDémarrage...";
 
-    public static void setup( String type,  int port) {
+    public static void setup(String type,  int port) {
         serverId = type;
         ports = port;
         subscribeChannels();
@@ -26,10 +25,16 @@ public class RedisDataSender {
     public static void sendData() {
         String key = serverId + ports;
         String value = ports + "#" + motd  + "#" + Bukkit.getServer().getOnlinePlayers().size() + "#" + Bukkit.getServer().getMaxPlayers();
-        Jedis jedis = JedisFactory.getInstance().getResource();
-        jedis.set(key, value);
-        jedis.expire(key, 3);
-        jedis.close();
+        Jedis jedis = null;
+        try {
+            jedis = JedisFactory.getInstance().getPool().getResource();
+            jedis.set(key, value);
+            jedis.expire(key, 3);
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
     }
 
     public static void refreshTimer() {
@@ -44,14 +49,22 @@ public class RedisDataSender {
 
 
     private static void subscribeChannels() {
-        final Subscriber subscriber = new Subscriber(); //permet de reçevoir les données
+        final Subscriber subscriber = new Subscriber();
 
         Bukkit.getServer().getScheduler().runTaskAsynchronously(BukkitInjector.getApi().getRushland(), new Runnable() {
             @Override
             public void run() {
                 try {
                     CodeUtils.logToConsole("Subscribing to '" + channelSub + "' channel");
-                    JedisFactory.getInstance().getResource().subscribe(subscriber, channelSub);
+                    Jedis jedis = null;
+                    try {
+                        jedis = JedisFactory.getInstance().getPool().getResource();
+                        jedis.subscribe(subscriber, channelSub);
+                    } finally {
+                        if (jedis != null) {
+                            jedis.close();
+                        }
+                    }
                     CodeUtils.logToConsole("Subscription ended.");
                 } catch (Exception e) {
                     CodeUtils.logToConsole("Subscribing failed." );
@@ -61,8 +74,6 @@ public class RedisDataSender {
             }
         });
 
-        final Jedis publisherJedis = JedisFactory.getInstance().getResource();
-
-        getPublisher = new Publisher(publisherJedis, channelSub);
+        getPublisher = new Publisher(channelSub);
     }
 }

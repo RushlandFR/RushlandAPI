@@ -3,6 +3,7 @@ package fr.rushland.api;
 import java.io.File;
 import java.util.ArrayList;
 
+import fr.rushland.api.redis.JedisFactory;
 import fr.rushland.api.redis.RedisDataSender;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -34,19 +35,19 @@ public class RushlandAPI {
     public ArrayList<PlayerInfo> playerList = new ArrayList<>();
 
     public RushlandAPI(BukkitInjector rushland){
-
         this.rushland = rushland;
         this.config = new Config(this.rushland, this);
         this.datamanager = new DataManager(this.rushland, this);
         this.commandemanager = new CommandManager(this, this.rushland);
         this.eventmanager = new EventManager(this.rushland,this);
-
     }
 
     public BukkitInjector getRushland() {
         return this.rushland;
     }
+    
     public void enable() {
+        JedisFactory.getInstance();
         File logsFolder = new File("logs/");
         File filesList[] = logsFolder.listFiles();
         for (int i = 0; i < filesList.length; i++) {
