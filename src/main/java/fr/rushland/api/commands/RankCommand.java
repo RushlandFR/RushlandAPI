@@ -153,7 +153,7 @@ public class RankCommand implements CommandExecutor {
                             }
                         }
                         this.api.getDataManager().getPlayerDB().setKarmaPlayer(uuid, rankname);
-                        sender.sendMessage("§aVous avez ajouté le grade boutique §2" + rankname + "§a à §2" + player.getName());
+                        sender.sendMessage("§aVous avez ajouté le grade boutique §2" + rankname + "§a à §2" + pseudo);
                         if (player != null) {
                             PlayerInfo pInfo = PlayerInfo.get(player);
                             pInfo.karma = rankname;

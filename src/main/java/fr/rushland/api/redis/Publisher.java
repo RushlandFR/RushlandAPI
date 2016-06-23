@@ -7,19 +7,25 @@ import java.util.logging.Level;
 
 public class Publisher {
 
-
-    private final Jedis publisherJedis;
-
     private final String channel;
+    private JedisFactory jedisFactory;
 
-    public Publisher(Jedis publisherJedis, String channel) {
-        this.publisherJedis = publisherJedis;
+    public Publisher(String channel) {
         this.channel = channel;
+        this.jedisFactory = JedisFactory.getInstance();
     }
 
     public void publish(String message) {
         try {
-            publisherJedis.publish(channel, message);
+            Jedis jedis = null;
+            try {
+                jedis = jedisFactory.getPool().getResource();
+                jedis.publish(channel, message);
+            } finally {
+                if (jedis != null) {
+                    jedis.close();
+                }
+            }
         } catch (Exception e) {
             BukkitInjector.getApi().getRushland().getLogger().log(Level.SEVERE, "Failed to publish ", e);
         }

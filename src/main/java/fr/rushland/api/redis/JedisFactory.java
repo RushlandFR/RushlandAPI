@@ -1,21 +1,20 @@
 package fr.rushland.api.redis;
 
-
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
-/**
- *
- * @author Aquazus
- */
 public class JedisFactory {
+    
     private static JedisFactory instance;
-    private static JedisPool jedisPool;
+    private JedisPool jedisPool;
 
     public JedisFactory() {
-        jedisPool = new JedisPool("127.0.0.1", 6379);
+        JedisPoolConfig config = new JedisPoolConfig();
+        config.setTestOnBorrow(true);
+        jedisPool = new JedisPool(config, "127.0.0.1", 6379);
     }
-
-    public JedisPool getJedisPool() {
+    
+    public JedisPool getPool() {
         return jedisPool;
     }
 
