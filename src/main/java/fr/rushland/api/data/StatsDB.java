@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
+
 import fr.rushland.api.BukkitInjector;
 import fr.rushland.api.RushlandAPI;
 
@@ -25,12 +27,36 @@ public class StatsDB {
     private HashMap<String, Integer> deaths = new HashMap<String, Integer>();
     private ArrayList<String> wins = new ArrayList<String>();
     private ArrayList<String> loses = new ArrayList<String>();
+    private HashMap<String, String> lastKill = new HashMap<>();
+    private HashMap<String, String> lastDeath = new HashMap<>();
 
     public StatsDB(BukkitInjector rushland, RushlandAPI api) {
         this.api = api;
         this.rushland = rushland;
     }
 
+    public void addCooldownKill(String kill, String death) {
+        lastKill.put(kill, death);
+        Bukkit.getScheduler().runTaskLater(api.getRushland(), new Runnable() {
+            
+            @Override
+            public void run() {
+                lastKill.remove(kill);
+            }
+        }, 20L * 15);
+    }
+    
+    public void addCooldownDeath(String death, String kill) {
+        lastDeath.put(death, kill);
+        Bukkit.getScheduler().runTaskLater(api.getRushland(), new Runnable() {
+            
+            @Override
+            public void run() {
+                lastDeath.remove(death);
+            }
+        }, 20L * 15);
+    }
+    
     public void configStats(String gameType, boolean useKills, boolean useDeaths, boolean useWins, boolean useLoses) {
         this.gameType = gameType;
         this.useKills = useKills;
@@ -170,7 +196,12 @@ public class StatsDB {
         }
     }
     
-    public void addKill(String uuid) {
+    public void addKill(String uuid, String killed) {
+        if (lastKill.containsKey(uuid)) {
+            if (lastKill.get(uuid).equals(killed)) {
+                return;
+            }
+        }
         if (kills.containsKey(uuid)) {
             int oldKills = kills.get(uuid);
             kills.put(uuid, oldKills + 1);
@@ -194,7 +225,12 @@ public class StatsDB {
         }
     }
 
-    public void addDeath(String uuid) {
+    public void addDeath(String uuid, String killer) {
+        if (lastDeath.containsKey(uuid)) {
+            if (lastDeath.get(uuid).equals(killer)) {
+                return;
+            }
+        }
         if (deaths.containsKey(uuid)) {
             int oldDeaths = deaths.get(uuid);
             deaths.put(uuid, oldDeaths + 1);
