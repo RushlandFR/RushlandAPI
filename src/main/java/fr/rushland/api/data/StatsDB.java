@@ -38,25 +38,25 @@ public class StatsDB {
     public void addCooldownKill(String kill, String death) {
         lastKill.put(kill, death);
         Bukkit.getScheduler().runTaskLater(api.getRushland(), new Runnable() {
-            
+
             @Override
             public void run() {
                 lastKill.remove(kill);
             }
         }, 20L * 15);
     }
-    
+
     public void addCooldownDeath(String death, String kill) {
         lastDeath.put(death, kill);
         Bukkit.getScheduler().runTaskLater(api.getRushland(), new Runnable() {
-            
+
             @Override
             public void run() {
                 lastDeath.remove(death);
             }
         }, 20L * 15);
     }
-    
+
     public void configStats(String gameType, boolean useKills, boolean useDeaths, boolean useWins, boolean useLoses) {
         this.gameType = gameType;
         this.useKills = useKills;
@@ -130,18 +130,18 @@ public class StatsDB {
                 queryStatement.close();
                 deaths.remove(uuid);
             }
-            
+
             if (useWins && !wins.isEmpty() && wins.contains(uuid)) {
-                    PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("UPDATE stats_" + gameType + " SET wins = wins + 1 WHERE uuid = ?");
-                    queryStatement.setString(1, uuid);
-                    queryStatement.executeUpdate();
-                    queryStatement.close();
+                PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("UPDATE stats_" + gameType + " SET wins = wins + 1 WHERE uuid = ?");
+                queryStatement.setString(1, uuid);
+                queryStatement.executeUpdate();
+                queryStatement.close();
             }
             if (useLoses && !loses.isEmpty() && loses.contains(uuid)) {
-                    PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("UPDATE stats_" + gameType + " SET loses = loses + 1 WHERE uuid = ?");
-                    queryStatement.setString(1, uuid);
-                    queryStatement.executeUpdate();
-                    queryStatement.close();
+                PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("UPDATE stats_" + gameType + " SET loses = loses + 1 WHERE uuid = ?");
+                queryStatement.setString(1, uuid);
+                queryStatement.executeUpdate();
+                queryStatement.close();
             }
             clearPlayer(uuid);
         } catch (SQLException e) {
@@ -195,7 +195,7 @@ public class StatsDB {
             e.printStackTrace();
         }
     }
-    
+
     public void addKill(String uuid, String killed) {
         if (lastKill.containsKey(uuid)) {
             if (lastKill.get(uuid).equals(killed)) {
@@ -210,7 +210,7 @@ public class StatsDB {
             kills.put(uuid, 1);
         }
     }
-    
+
     private void clearPlayer(String uuid) {
         if (kills.containsKey(uuid)) {
             kills.remove(uuid);
@@ -227,13 +227,14 @@ public class StatsDB {
     }
 
     public void addDeath(String uuid, String killer) {
-        if (lastDeath.containsKey(uuid)) {
-            if (lastDeath.get(uuid).equals(killer)) {
-                return;
+        if (killer != null) {
+            if (lastDeath.containsKey(uuid)) {
+                if (lastDeath.get(uuid).equals(killer)) {
+                    return;
+                }
             }
+            addCooldownDeath(uuid, killer);
         }
-        addCooldownDeath(uuid, killer);
-
         if (deaths.containsKey(uuid)) {
             int oldDeaths = deaths.get(uuid);
             deaths.put(uuid, oldDeaths + 1);
