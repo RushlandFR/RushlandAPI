@@ -202,6 +202,7 @@ public class StatsDB {
                 return;
             }
         }
+        addCooldownKill(uuid, killed);
         if (kills.containsKey(uuid)) {
             int oldKills = kills.get(uuid);
             kills.put(uuid, oldKills + 1);
@@ -231,6 +232,8 @@ public class StatsDB {
                 return;
             }
         }
+        addCooldownDeath(uuid, killer);
+
         if (deaths.containsKey(uuid)) {
             int oldDeaths = deaths.get(uuid);
             deaths.put(uuid, oldDeaths + 1);
