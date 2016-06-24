@@ -76,16 +76,17 @@ public class PlayerJoin implements Listener{
                     api.getDataManager().getPlayerDB().playerInit(player);
                 }
                 PlayerInfo playerInfo = new PlayerInfo(player);
-
                 if (event.getResult() == PlayerLoginEvent.Result.KICK_WHITELIST) {
                     if (playerInfo.getMaxPermLevel() >= 10) {
                         event.setResult(PlayerLoginEvent.Result.ALLOWED);
+                        event.allow();
                     } else {
                         playerInfo.remove();
                     }
                 } else if (event.getResult() == PlayerLoginEvent.Result.KICK_FULL) {
                     if (playerInfo.getMaxPermLevel() >= 10) {
                         event.setResult(PlayerLoginEvent.Result.ALLOWED);
+                        event.allow();
                     } else {
                         playerInfo.remove();
                     }
