@@ -107,6 +107,14 @@ public class StatsDB {
             e.printStackTrace();
         }
     }
+    
+    public int getKills(String uuid) {
+        if (kills.containsKey(uuid)) {
+            return kills.get(uuid);
+        } else {
+            return 0;
+        }
+    }
 
     public void insertPlayer(String uuid) {
         try {
