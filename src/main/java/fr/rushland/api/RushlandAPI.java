@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import fr.rushland.api.redis.JedisFactory;
 import fr.rushland.api.redis.RedisDataSender;
+import fr.rushland.api.rushcoins.RushcoinsManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -30,6 +32,7 @@ public class RushlandAPI {
     private CommandManager commandemanager;
     private Config config;
     private EventManager eventmanager;
+    private RushcoinsManager rushcoinsManager;
     private ProtocolManager protocolManager;
 
     public ArrayList<PlayerInfo> playerList = new ArrayList<>();
@@ -39,11 +42,16 @@ public class RushlandAPI {
         this.config = new Config(this.rushland, this);
         this.datamanager = new DataManager(this.rushland, this);
         this.commandemanager = new CommandManager(this, this.rushland);
-        this.eventmanager = new EventManager(this.rushland,this);
+        this.eventmanager = new EventManager(this.rushland, this);
+        this.rushcoinsManager = new RushcoinsManager(this.rushland, this);
     }
 
     public BukkitInjector getRushland() {
         return this.rushland;
+    }
+    
+    public RushcoinsManager getRushcoinsManager() {
+        return this.rushcoinsManager;
     }
     
     public void enable() {
@@ -64,6 +72,7 @@ public class RushlandAPI {
         this.datamanager.connection();
         this.datamanager.initData();
         this.eventmanager.registerEvent();
+        this.rushcoinsManager.load();
         this.getDataManager().moneylist.add("shopcoins");
         this.getDataManager().moneylist.add("rushcoins");
 
