@@ -58,9 +58,9 @@ public class RushcoinsManager {
         for (RushcoinsAchievement achievement : achievements.get(player.getUniqueId().toString()).values()) {
             int totalAmount = achievement.getReward() * achievement.getQuantity();
             if (achievement.getQuantity() > 1) {
-                player.sendMessage(" §6§l> §e§l+" + totalAmount + "§e (x" + achievement.getQuantity() + " " + achievement.getDisplayName() + ")");
+                player.sendMessage(" §6§l> §a§l+" + totalAmount + "§e (x" + achievement.getQuantity() + " " + achievement.getDisplayName() + ")");
             } else {
-                player.sendMessage(" §6§l> §e§l+" + totalAmount + "§e (" + achievement.getDisplayName() + ")");
+                player.sendMessage(" §6§l> §a§l+" + totalAmount + "§e (" + achievement.getDisplayName() + ")");
             }
         }
         player.sendMessage("§6§m§l---------------------");
