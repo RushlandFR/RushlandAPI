@@ -65,8 +65,8 @@ public class PlayerJoin implements Listener{
             }
         });
     }
-
-    @EventHandler(priority = EventPriority.HIGH)
+    
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerLogin(final PlayerLoginEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(this.api.getRushland(), new Runnable() {
             @Override
@@ -75,6 +75,16 @@ public class PlayerJoin implements Listener{
                 if (!api.getDataManager().getPlayerDB().isInsert(player)) {
                     api.getDataManager().getPlayerDB().playerInit(player);
                 }
+            }
+        });
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onPlayerLoginKick(final PlayerLoginEvent event) {
+        Bukkit.getScheduler().runTaskLater(this.api.getRushland(), new Runnable() {
+            @Override
+            public void run() {
+                final Player player = event.getPlayer();
                 PlayerInfo playerInfo = new PlayerInfo(player);
                 if (event.getResult() == PlayerLoginEvent.Result.KICK_WHITELIST) {
                     if (playerInfo.getMaxPermLevel() >= 10) {
@@ -92,6 +102,6 @@ public class PlayerJoin implements Listener{
                     }
                 }
             }
-        });
+        }, 20L);
     }
 }
