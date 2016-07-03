@@ -45,11 +45,17 @@ public class RushcoinsManager {
         if (!achievements.containsKey(player.getUniqueId().toString())) {
             return;
         }
+        if (achievements.get(player.getUniqueId().toString()) == null) {
+            return;
+        }
+        if (achievements.get(player.getUniqueId().toString()).isEmpty()) {
+            return;
+        }
 
         player.sendMessage("§6§m§l---------------------");
         player.sendMessage("§e§lGains de RushCoins :");
         player.sendMessage(" ");
-        for (RushcoinsAchievement achievement : achievements.get(player.getUniqueId()).values()) {
+        for (RushcoinsAchievement achievement : achievements.get(player.getUniqueId().toString()).values()) {
             int totalAmount = achievement.getReward() * achievement.getQuantity();
             if (achievement.getQuantity() > 1) {
                 player.sendMessage(" §6§l> §e§l+" + totalAmount + "§e (x" + achievement.getQuantity() + " " + achievement.getDisplayName() + ")");
@@ -62,7 +68,7 @@ public class RushcoinsManager {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
             @Override
             public void run() {
-                for (RushcoinsAchievement achievement : achievements.get(player.getUniqueId()).values()) {
+                for (RushcoinsAchievement achievement : achievements.get(player.getUniqueId().toString()).values()) {
                     int totalAmount = achievement.getReward() * achievement.getQuantity();
                     api.getDataManager().getMoneyAPI().addPlayermoney(player, "rushcoins", totalAmount);
                 }
