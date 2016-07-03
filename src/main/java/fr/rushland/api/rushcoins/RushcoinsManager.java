@@ -24,7 +24,21 @@ public class RushcoinsManager {
     }
     
     public void addAchievement(Player player, RushcoinsAchievement achievement) {
-        achievements.get(player.getUniqueId().toString()).put(achievement.getId(), achievement);
+        if (!achievements.containsKey(player.getUniqueId().toString())) {
+            HashMap<String, RushcoinsAchievement> newHashmap = new HashMap<>();
+            newHashmap.put(achievement.getId(), achievement);
+            achievements.put(player.getUniqueId().toString(), newHashmap);
+        } else {
+            achievements.get(player.getUniqueId().toString()).put(achievement.getId(), achievement);
+        }
+    }
+    
+    public HashMap<String, RushcoinsAchievement> getAchievements(String uuid) {
+        return achievements.get(uuid);
+    }
+    
+    public void setAchievements(String uuid, HashMap<String, RushcoinsAchievement> achievements) {
+        this.achievements.put(uuid, achievements);
     }
 
     public void giveRewards(Player player) {
