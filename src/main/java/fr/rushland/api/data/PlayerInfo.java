@@ -11,7 +11,7 @@ import fr.rushland.api.BukkitInjector;
 import fr.rushland.api.RushlandAPI;
 
 public class PlayerInfo {
-
+ 
     private Player player;
     private UUID uuid;
     private RushlandAPI api = BukkitInjector.getApi();
