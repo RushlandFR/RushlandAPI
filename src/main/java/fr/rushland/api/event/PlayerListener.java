@@ -19,12 +19,12 @@ import fr.rushland.api.BukkitInjector;
 import fr.rushland.api.RushlandAPI;
 import fr.rushland.api.data.PlayerInfo;
 
-public class PlayerJoin implements Listener{
+public class PlayerListener implements Listener{
 
     private BukkitInjector rushland;
     private RushlandAPI api;
 
-    public PlayerJoin (BukkitInjector rushland,RushlandAPI api) {
+    public PlayerListener(BukkitInjector rushland,RushlandAPI api) {
         this.rushland = rushland;
         this.api = api;
     }
@@ -35,7 +35,7 @@ public class PlayerJoin implements Listener{
             event.setCancelled(true);
         }
     }
-    
+
     @EventHandler
     public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
@@ -102,7 +102,7 @@ public class PlayerJoin implements Listener{
             }
         });
     }
-    
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerLogin(final PlayerLoginEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(this.api.getRushland(), new Runnable() {

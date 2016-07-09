@@ -19,6 +19,6 @@ public class EventManager {
     }
 
     public void registerEvent() {
-        this.pm.registerEvents(new PlayerJoin(this.rushland,this.api), this.rushland);
+        this.pm.registerEvents(new PlayerListener(this.rushland,this.api), this.rushland);
     }
 }
