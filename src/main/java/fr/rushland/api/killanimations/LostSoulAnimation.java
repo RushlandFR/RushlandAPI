@@ -11,7 +11,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.rushland.api.BukkitInjector;
-import fr.rushland.api.utils.CodeUtils;
 
 public class LostSoulAnimation {
 
