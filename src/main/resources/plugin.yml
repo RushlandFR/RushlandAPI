@@ -1,6 +1,6 @@
 name: RushlandAPI
 authors: [Aquazus, Zaral]
-main: fr.rushland.api.BukkitInjector
+main: fr.aquazus.rushland.api.BukkitInjector
 version: ${project.version}
 commands:
    grade:
