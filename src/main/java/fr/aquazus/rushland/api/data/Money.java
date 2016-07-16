@@ -194,8 +194,8 @@ public class Money {
         return true;
     }
 
-    public boolean setPlayerMoney (Player player, String moneyName, int setvalue) {
-        if (setvalue < 0) {
+    public boolean setPlayerMoney (Player player, String moneyName, int setValue) {
+        if (setValue < 0) {
             return true;
         }
         try {
@@ -206,24 +206,24 @@ public class Money {
                 PlayerInfo pInfo = PlayerInfo.get(player);
                 switch (moneyName) {
                     case ("rushcoins"):
-                        pInfo.rushcoins = setvalue;
+                        pInfo.rushcoins = setValue;
                     break;
                     case ("shopcoins"):
-                        pInfo.shopcoins = setvalue;
+                        pInfo.shopcoins = setValue;
                     break;
                 }
             }
             if (moneyName.equalsIgnoreCase("rushcoins")) {
                 PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = ? WHERE uuid = ?");
 
-                pst.setInt(1, setvalue);
+                pst.setInt(1, setValue);
                 pst.setString(2, player.getUniqueId().toString());
 
                 pst.executeUpdate();
 
             } else if (moneyName.equalsIgnoreCase("shopcoins")) {
                 PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = ? WHERE uuid = ?");
-                pst.setInt(1, setvalue);
+                pst.setInt(1, setValue);
                 pst.setString(2, player.getUniqueId().toString());
 
                 pst.executeUpdate();
