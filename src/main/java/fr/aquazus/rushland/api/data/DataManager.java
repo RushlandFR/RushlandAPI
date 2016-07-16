@@ -48,7 +48,7 @@ public class DataManager {
     public ArrayList<String> moneylist;
 
 
-    int DataId;
+    int dataId;
 
     /**
      * Gestion des PermLevel:
@@ -136,7 +136,7 @@ public class DataManager {
                 String host="jdbc:mysql://"+ip+"/"+db, username = user, passeword = passwd;
                 this.connection = (Connection) DriverManager.getConnection(host,username,passeword);
 
-                DataId = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.rushland, new Runnable() {
+                dataId = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.rushland, new Runnable() {
                     public void run() {
                         refreshConnection();
                     }
@@ -152,7 +152,7 @@ public class DataManager {
         if (isConnected()) {
             try {
                 this.connection.close();
-                Bukkit.getScheduler().cancelTask(DataId);
+                Bukkit.getScheduler().cancelTask(dataId);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
