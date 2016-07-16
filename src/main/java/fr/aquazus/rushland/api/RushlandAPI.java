@@ -82,7 +82,7 @@ public class RushlandAPI {
 
         this.commandemanager.load();
         this.config.initConf();
-        this.datamanager.connection();
+        this.datamanager.connect();
         this.datamanager.initData();
         this.eventmanager.registerEvent();
         this.rushcoinsManager.load();
@@ -107,7 +107,7 @@ public class RushlandAPI {
 
     public void disable() {
         RedisDataSender.getPublisher.publish(RedisDataSender.serverId + "#delete#" + RedisDataSender.ports);
-        this.datamanager.deconnection();
+        this.datamanager.disconnect();
     }
 
 
