@@ -35,12 +35,12 @@ public class Money {
     }
 
     public boolean updateMoney(PlayerInfo pInfo) {
-        setPlayermoney(pInfo.getUUID(), "rushcoins", pInfo.getRushcoins());
-        setPlayermoney(pInfo.getUUID(), "shopcoins", pInfo.getShopcoins());
+        setPlayerMoney(pInfo.getUUID(), "rushcoins", pInfo.getRushcoins());
+        setPlayerMoney(pInfo.getUUID(), "shopcoins", pInfo.getShopcoins());
         return true;
     }
 
-    public boolean addPlayermoney(UUID uuid, String moneyname, int addvalue) {
+    public boolean addPlayerMoney(UUID uuid, String moneyname, int addvalue) {
         try {
             if (!this.api.getDataManager().moneylist.contains(moneyname)) {
                 return false;
@@ -81,7 +81,7 @@ public class Money {
         return true;
     }
 
-    public boolean addPlayermoney(Player player, String moneyname, int addvalue) {
+    public boolean addPlayerMoney(Player player, String moneyname, int addvalue) {
         try {
             if (!this.api.getDataManager().moneylist.contains(moneyname)) {
                 return false;
@@ -194,7 +194,7 @@ public class Money {
         return true;
     }
 
-    public boolean setPlayermoney (Player player, String moneyname, int setvalue) {
+    public boolean setPlayerMoney (Player player, String moneyname, int setvalue) {
         if (setvalue < 0) {
             return true;
         }
@@ -237,7 +237,7 @@ public class Money {
         return true;
     }
 
-    public boolean setPlayermoney (UUID uuid, String moneyname, int setvalue) {
+    public boolean setPlayerMoney (UUID uuid, String moneyname, int setvalue) {
         if (setvalue < 0) {
             return true;
         }

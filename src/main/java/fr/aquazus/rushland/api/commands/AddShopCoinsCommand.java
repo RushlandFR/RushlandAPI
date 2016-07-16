@@ -61,7 +61,7 @@ public class AddShopCoinsCommand implements CommandExecutor {
                 sender.sendMessage("§c" + args[1] + " n'est pas un nombre valide.");
                 return true;
             }
-            this.api.getDataManager().getMoneyAPI().addPlayermoney(uuid, "shopcoins", shopcoins);
+            this.api.getDataManager().getMoneyAPI().addPlayerMoney(uuid, "shopcoins", shopcoins);
             sender.sendMessage("§aVous avez ajouté §2" + shopcoins + "§a ShopCoins à §2" + pseudo + "§a.");
         } else {
             sender.sendMessage("§cUtilisation: /addshopcoins <pseudo> <quantité>");

@@ -84,7 +84,7 @@ public class RushcoinsManager {
             public void run() {
                 for (RushcoinsAchievement achievement : achievements.get(player.getUniqueId().toString()).values()) {
                     int totalAmount = achievement.getReward() * achievement.getQuantity();
-                    api.getDataManager().getMoneyAPI().addPlayermoney(player, "rushcoins", totalAmount);
+                    api.getDataManager().getMoneyAPI().addPlayerMoney(player, "rushcoins", totalAmount);
                 }
             }
         });

@@ -93,7 +93,7 @@ public class RlshopCommand implements CommandExecutor {
             } else if (action.equalsIgnoreCase("shopcoins")) {
                 int amount = Integer.parseInt(args[2]);
                 pInfo.shopcoins += amount;
-                this.api.getDataManager().getMoneyAPI().setPlayermoney(uuid, "shopcoins", pInfo.shopcoins);
+                this.api.getDataManager().getMoneyAPI().setPlayerMoney(uuid, "shopcoins", pInfo.shopcoins);
                 if (player != null) {
                     player.kickPlayer("§aVous avez bien reçu vos §e" + amount + "§a ShopCoins.");
                 }

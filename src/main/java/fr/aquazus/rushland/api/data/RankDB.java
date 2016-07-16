@@ -121,7 +121,7 @@ public class RankDB {
         }
     }
 
-    public boolean addnewRank(String rankname, int defaultranklevel) {
+    public boolean addNewRank(String rankname, int defaultranklevel) {
         try {
             if (!rankExist(rankname)) {
                 PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("INSERT INTO RankSystem(rank, permLevel) VALUES(?, ?)");
@@ -160,7 +160,7 @@ public class RankDB {
         }
     }
 
-    public boolean setdefaultlevel(int ID, String name, int level){
+    public boolean setDefaultLevel(int ID, String name, int level){
         if (ID == 1) {
             try {
                 if (rankExist(name)) {
