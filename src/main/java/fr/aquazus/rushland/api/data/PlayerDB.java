@@ -34,7 +34,7 @@ public class PlayerDB {
     public boolean isInsert(Player player) {
         boolean insert = false;
         try {
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT id FROM PlayerInfo WHERE uuid = ?");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("SELECT id FROM PlayerInfo WHERE uuid = ?");
             pst.setString(1, player.getUniqueId().toString());
             pst.executeQuery();
             ResultSet result = pst.getResultSet();
@@ -49,7 +49,7 @@ public class PlayerDB {
     public boolean isInsert(UUID uuid) {
         boolean insert = false;
         try {
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT id FROM PlayerInfo WHERE uuid = ?");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("SELECT id FROM PlayerInfo WHERE uuid = ?");
             pst.setString(1, uuid.toString());
             pst.executeQuery();
             ResultSet result = pst.getResultSet();
@@ -63,7 +63,7 @@ public class PlayerDB {
 
     public ResultSet getPlayerInfo(Player player) {
         try {
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT *, NOW() as now FROM PlayerInfo WHERE uuid = ?");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("SELECT *, NOW() as now FROM PlayerInfo WHERE uuid = ?");
             pst.setString(1, player.getUniqueId().toString());
             pst.executeQuery();
             ResultSet result = pst.getResultSet();
@@ -77,7 +77,7 @@ public class PlayerDB {
 
     public ResultSet getPlayerInfo(UUID uuid) {
         try {
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT *, NOW() as now FROM PlayerInfo WHERE uuid = ?");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("SELECT *, NOW() as now FROM PlayerInfo WHERE uuid = ?");
             pst.setString(1, uuid.toString());
             pst.executeQuery();
             ResultSet result = pst.getResultSet();
@@ -91,7 +91,7 @@ public class PlayerDB {
 
     public void setPlayerPermLevel(Player player , int ranklevel){
         try {
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET permLevel = ? WHERE uuid=?");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET permLevel = ? WHERE uuid=?");
 
             pst.setInt(1, ranklevel);
             pst.setString(2, player.getUniqueId().toString());
@@ -105,7 +105,7 @@ public class PlayerDB {
     public void setRankPlayer(Player player, String rank, boolean isFemale) {
         try {
             if (this.api.getDataManager().getRankSystemDB().rankExist(rank)) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerRank = ?, rankFemale = ? WHERE uuid = ?");
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET playerRank = ?, rankFemale = ? WHERE uuid = ?");
 
                 pst.setString(1, rank);
                 pst.setBoolean(2, isFemale);
@@ -121,7 +121,7 @@ public class PlayerDB {
 
     public void setRankPlayer(UUID uuid, String rank, boolean isFemale) {
         try {
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerRank = ?, rankFemale = ? WHERE uuid = ?");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET playerRank = ?, rankFemale = ? WHERE uuid = ?");
 
             pst.setString(1, rank);
             pst.setBoolean(2, isFemale);
@@ -138,11 +138,11 @@ public class PlayerDB {
         try {
             PreparedStatement pst;
             if (karma.equalsIgnoreCase("diamant")) {
-                pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE uuid = ?");
+                pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE uuid = ?");
             } else if (karma.equalsIgnoreCase("emeraude")) {
-                pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 100 YEAR) WHERE uuid = ?");
+                pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 100 YEAR) WHERE uuid = ?");
             } else {
-                pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE uuid = ?");
+                pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE uuid = ?");
             }
 
             pst.setString(1, karma);
@@ -158,11 +158,11 @@ public class PlayerDB {
         try {
             PreparedStatement pst;
             if (karma.equalsIgnoreCase("diamant")) {
-                pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE uuid = ?");
+                pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE uuid = ?");
             } else if (karma.equalsIgnoreCase("emeraude")) {
-                pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 100 YEAR) WHERE uuid = ?");
+                pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 100 YEAR) WHERE uuid = ?");
             } else {
-                pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE uuid = ?");
+                pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE uuid = ?");
             }
 
             pst.setString(1, karma);
@@ -176,7 +176,7 @@ public class PlayerDB {
 
     public void addMonth(UUID uuid) {
         try {
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET expire = DATE_ADD(expire, INTERVAL 31 DAY) WHERE uuid = ?");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET expire = DATE_ADD(expire, INTERVAL 31 DAY) WHERE uuid = ?");
             pst.setString(1, uuid.toString());
             pst.executeUpdate();
             pst.close();
@@ -187,7 +187,7 @@ public class PlayerDB {
 
     public void deleteKarmaPlayer(Player player) {
         try {
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = player, expire = null WHERE uuid = ?");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = player, expire = null WHERE uuid = ?");
 
             pst.setString(1, player.getUniqueId().toString());
             pst.executeUpdate();
@@ -199,7 +199,7 @@ public class PlayerDB {
 
     public void deleteKarmaPlayer(UUID uuid) {
         try {
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = player, expire = null WHERE uuid = ?");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = player, expire = null WHERE uuid = ?");
 
             pst.setString(1, uuid.toString());
             pst.executeUpdate();
@@ -211,7 +211,7 @@ public class PlayerDB {
 
     public void playerInit(Player player) {
         try {
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("INSERT INTO PlayerInfo(uuid, playerName, permLevel, playerRank, playerKarma, rushcoins, shopcoins) VALUES(?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("INSERT INTO PlayerInfo(uuid, playerName, permLevel, playerRank, playerKarma, rushcoins, shopcoins) VALUES(?, ?, ?, ?, ?, ?, ?)");
             pst.setString(1, player.getUniqueId().toString());
             pst.setString(2, player.getName());
             pst.setInt(3, 0);

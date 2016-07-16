@@ -58,7 +58,7 @@ public class Money {
                 }
             }
             if (moneyname.equalsIgnoreCase("rushcoins")) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = rushcoins + ? WHERE uuid = ?");
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = rushcoins + ? WHERE uuid = ?");
 
                 pst.setDouble(1, addvalue);
                 pst.setString(2, uuid.toString());
@@ -66,7 +66,7 @@ public class Money {
                 pst.executeUpdate();
                 pst.close();
             } else if (moneyname.equalsIgnoreCase("shopcoins")) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = shopcoins + ? WHERE uuid = ?");
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = shopcoins + ? WHERE uuid = ?");
                 pst.setInt(1, addvalue);
                 pst.setString(2, uuid.toString());
                 pst.executeUpdate();
@@ -102,7 +102,7 @@ public class Money {
                 }
             }
             if (moneyname.equalsIgnoreCase("rushcoins")) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = rushcoins + ? WHERE uuid = ?");
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = rushcoins + ? WHERE uuid = ?");
 
                 pst.setDouble(1, addvalue);
                 pst.setString(2, player.getUniqueId().toString());
@@ -110,7 +110,7 @@ public class Money {
                 pst.executeUpdate();
                 pst.close();
             } else if (moneyname.equalsIgnoreCase("shopcoins")) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = shopcoins + ? WHERE uuid = ?");
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = shopcoins + ? WHERE uuid = ?");
                 pst.setInt(1, addvalue);
                 pst.setString(2, player.getUniqueId().toString());
                 pst.executeUpdate();
@@ -128,7 +128,7 @@ public class Money {
     public int getPlayerMoney (Player player, String moneyname) {
         try {
             if (moneyname.equalsIgnoreCase("rushcoins")) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT rushcoins FROM PlayerInfo WHERE uuid = ?");
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("SELECT rushcoins FROM PlayerInfo WHERE uuid = ?");
 
                 pst.setString(1, player.getUniqueId().toString());
                 pst.executeQuery();
@@ -138,7 +138,7 @@ public class Money {
                 }
                 pst.close();
             } else if (moneyname.equalsIgnoreCase("shopcoins")) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT shopcoins FROM PlayerInfo WHERE uuid = ?");
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("SELECT shopcoins FROM PlayerInfo WHERE uuid = ?");
                 pst.setString(1, player.getUniqueId().toString());
                 pst.executeQuery();
                 ResultSet result = pst.getResultSet();
@@ -169,7 +169,7 @@ public class Money {
                 }
             }
             if (moneyname.equalsIgnoreCase("rushcoins")) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = rushcoins - ? WHERE uuid = ?");
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = rushcoins - ? WHERE uuid = ?");
 
                 pst.setInt(1, removevalue);
                 pst.setString(2, player.getUniqueId().toString());
@@ -177,7 +177,7 @@ public class Money {
                 pst.executeUpdate();
                 pst.close();
             } else if(moneyname.equalsIgnoreCase("shopcoins")) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = shopcoins - ? WHERE uuid = ?");
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = shopcoins - ? WHERE uuid = ?");
 
                 pst.setInt(1, removevalue);
                 pst.setString(2, player.getUniqueId().toString());
@@ -194,17 +194,17 @@ public class Money {
         return true;
     }
 
-    public boolean setPlayerMoney (Player player, String moneyname, int setvalue) {
+    public boolean setPlayerMoney (Player player, String moneyName, int setvalue) {
         if (setvalue < 0) {
             return true;
         }
         try {
-            if (!this.api.getDataManager().moneylist.contains(moneyname)) {
+            if (!this.api.getDataManager().moneylist.contains(moneyName)) {
                 return false;
             }
             if (player.isOnline()) {
                 PlayerInfo pInfo = PlayerInfo.get(player);
-                switch (moneyname) {
+                switch (moneyName) {
                     case ("rushcoins"):
                         pInfo.rushcoins = setvalue;
                     break;
@@ -213,16 +213,16 @@ public class Money {
                     break;
                 }
             }
-            if (moneyname.equalsIgnoreCase("rushcoins")) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = ? WHERE uuid = ?");
+            if (moneyName.equalsIgnoreCase("rushcoins")) {
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = ? WHERE uuid = ?");
 
                 pst.setInt(1, setvalue);
                 pst.setString(2, player.getUniqueId().toString());
 
                 pst.executeUpdate();
 
-            } else if (moneyname.equalsIgnoreCase("shopcoins")) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = ? WHERE uuid = ?");
+            } else if (moneyName.equalsIgnoreCase("shopcoins")) {
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = ? WHERE uuid = ?");
                 pst.setInt(1, setvalue);
                 pst.setString(2, player.getUniqueId().toString());
 
@@ -237,24 +237,24 @@ public class Money {
         return true;
     }
 
-    public boolean setPlayerMoney (UUID uuid, String moneyname, int setvalue) {
+    public boolean setPlayerMoney (UUID uuid, String moneyName, int setvalue) {
         if (setvalue < 0) {
             return true;
         }
         try {
-            if (!this.api.getDataManager().moneylist.contains(moneyname)) {
+            if (!this.api.getDataManager().moneylist.contains(moneyName)) {
                 return false;
             }
-            if (moneyname.equalsIgnoreCase("rushcoins")) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = ? WHERE uuid = ?");
+            if (moneyName.equalsIgnoreCase("rushcoins")) {
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET rushcoins = ? WHERE uuid = ?");
 
                 pst.setInt(1, setvalue);
                 pst.setString(2, uuid.toString());
 
                 pst.executeUpdate();
 
-            } else if (moneyname.equalsIgnoreCase("shopcoins")) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = ? WHERE uuid = ?");
+            } else if (moneyName.equalsIgnoreCase("shopcoins")) {
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET shopcoins = ? WHERE uuid = ?");
                 pst.setInt(1, setvalue);
                 pst.setString(2, uuid.toString());
 

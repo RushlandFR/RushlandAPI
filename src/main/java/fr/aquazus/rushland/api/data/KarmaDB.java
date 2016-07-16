@@ -50,7 +50,7 @@ public class KarmaDB {
         int maxSub = 0;
 
         try {
-            PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("SELECT MAX(id) FROM KarmaSystem;");
+            PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("SELECT MAX(id) FROM KarmaSystem;");
             queryStatement.executeQuery();
             ResultSet resultSet = queryStatement.getResultSet();
             while (resultSet.next()) {
@@ -67,7 +67,7 @@ public class KarmaDB {
         try {
             String rank;
 
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT karma FROM KarmaSystem WHERE id = ?");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("SELECT karma FROM KarmaSystem WHERE id = ?");
             pst.setInt(1, id);
             pst.executeQuery();
             ResultSet result = pst.getResultSet();
@@ -87,7 +87,7 @@ public class KarmaDB {
 
     public int getKarmaLevel(String karma) {
         try {
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT permLevel FROM KarmaSystem WHERE karma = ?");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("SELECT permLevel FROM KarmaSystem WHERE karma = ?");
             pst.setString(1, karma);
             pst.executeQuery();
             ResultSet result = pst.getResultSet();
@@ -104,7 +104,7 @@ public class KarmaDB {
 
     public boolean isKarmaExist(String karmaname) {
         try {
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT id FROM KarmaSystem WHERE karma = ?");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("SELECT id FROM KarmaSystem WHERE karma = ?");
 
             pst.setString(1, karmaname);
             ResultSet result = pst.executeQuery();
@@ -120,16 +120,16 @@ public class KarmaDB {
         }
     }
 
-    public boolean addnewKarma(String karmaname, int defaultKarmaLevel) {
+    public boolean addNewKarma(String karmaName, int defaultKarmaLevel) {
         try {
-            if (!karmaList.containsKey(karmaname)) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("INSERT INTO KarmaSystem (karma, permLevel) VALUES(?, ?)");
+            if (!karmaList.containsKey(karmaName)) {
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("INSERT INTO KarmaSystem (karma, permLevel) VALUES(?, ?)");
 
-                pst.setString(1, karmaname);
+                pst.setString(1, karmaName);
                 pst.setInt(2, defaultKarmaLevel);
                 pst.executeUpdate();
                 pst.close();
-                karmaList.put(karmaname, defaultKarmaLevel);
+                karmaList.put(karmaName, defaultKarmaLevel);
 
                 return true;
             } else {
@@ -143,7 +143,7 @@ public class KarmaDB {
     public boolean removeKarma(String karmaName) {
         try {
             if (!karmaList.containsKey(karmaName)) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("DELETE FROM KarmaSystem WHERE karma= ?");
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("DELETE FROM KarmaSystem WHERE karma= ?");
                 pst.setString(1, karmaName);
                 pst.executeUpdate();
                 pst.close();

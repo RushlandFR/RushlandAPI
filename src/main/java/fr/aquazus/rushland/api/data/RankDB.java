@@ -50,7 +50,7 @@ public class RankDB {
         int maxSub = 0;
 
         try {
-            PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("SELECT MAX(id) FROM RankSystem");
+            PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("SELECT MAX(id) FROM RankSystem");
             queryStatement.executeQuery();
             ResultSet resultSet = queryStatement.getResultSet();
             while (resultSet.next()) {
@@ -65,7 +65,7 @@ public class RankDB {
 
     public int getRankLevel(String karma) {
         try {
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT permLevel FROM RankSystem WHERE rank = ?");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("SELECT permLevel FROM RankSystem WHERE rank = ?");
             pst.setString(1, karma);
             pst.executeQuery();
             ResultSet result = pst.getResultSet();
@@ -83,7 +83,7 @@ public class RankDB {
     public String getRankName(int id) {
         try {
             String rank;
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT rank FROM RankSystem WHERE id = ?");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("SELECT rank FROM RankSystem WHERE id = ?");
             pst.setInt(1, id);
             pst.executeQuery();
             ResultSet result = pst.getResultSet();
@@ -103,7 +103,7 @@ public class RankDB {
 
     public boolean rankExist(String rankname) {
         try {
-            PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT id FROM RankSystem WHERE rank = ?");
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("SELECT id FROM RankSystem WHERE rank = ?");
 
             pst.setString(1, rankname);
             pst.executeQuery();
@@ -124,7 +124,7 @@ public class RankDB {
     public boolean addNewRank(String rankname, int defaultranklevel) {
         try {
             if (!rankExist(rankname)) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("INSERT INTO RankSystem(rank, permLevel) VALUES(?, ?)");
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("INSERT INTO RankSystem(rank, permLevel) VALUES(?, ?)");
 
                 pst.setString(1, rankname);
                 pst.setInt(2, defaultranklevel);	
@@ -144,7 +144,7 @@ public class RankDB {
     public boolean removeRank(String rankname) {
         try {
             if (rankExist(rankname)) {
-                PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("DELETE FROM RankSystem WHERE rank = ?");
+                PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("DELETE FROM RankSystem WHERE rank = ?");
 
                 pst.setString(1, rankname);
 
@@ -164,7 +164,7 @@ public class RankDB {
         if (ID == 1) {
             try {
                 if (rankExist(name)) {
-                    PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE RankSystem SET permLevel = ? WHERE rank = ?");
+                    PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE RankSystem SET permLevel = ? WHERE rank = ?");
 
                     pst.setInt(1, level);
                     pst.setString(2, name);
@@ -183,7 +183,7 @@ public class RankDB {
         } else if (ID == 2) {
             try {
                 if (api.getDataManager().getKarmaDB().getKarmaList().containsKey(name)) {
-                    PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE KarmaSystem SET permLevel = ? WHERE karma = ?");
+                    PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE KarmaSystem SET permLevel = ? WHERE karma = ?");
 
                     pst.setInt(1, level);
                     pst.setString(2, name);

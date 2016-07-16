@@ -82,7 +82,7 @@ public class StatsDB {
 
     public boolean isInsert(String uuid) {
         try {
-            PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("SELECT id FROM stats_" + gameType + " WHERE uuid = ?");
+            PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("SELECT id FROM stats_" + gameType + " WHERE uuid = ?");
             queryStatement.setString(1, uuid);
             queryStatement.executeQuery();
             ResultSet resultSet = queryStatement.getResultSet();
@@ -99,12 +99,12 @@ public class StatsDB {
         try {
             PreparedStatement queryStatement = null;
             if (useKills && useWins) {
-                queryStatement = this.api.getDataManager().getconnection().prepareStatement("INSERT INTO stats_" +  gameType + "(uuid, kills, deaths, wins, loses) VALUES (?, ?, ?, ?, ?)");
+                queryStatement = this.api.getDataManager().getConnection().prepareStatement("INSERT INTO stats_" +  gameType + "(uuid, kills, deaths, wins, loses) VALUES (?, ?, ?, ?, ?)");
 
             } else if (useKills) {
-                queryStatement = this.api.getDataManager().getconnection().prepareStatement("INSERT INTO stats_" +  gameType + "(uuid, kills, deaths) VALUES (?, ?, ?)");
+                queryStatement = this.api.getDataManager().getConnection().prepareStatement("INSERT INTO stats_" +  gameType + "(uuid, kills, deaths) VALUES (?, ?, ?)");
             } else if (useWins) {
-                queryStatement = this.api.getDataManager().getconnection().prepareStatement("INSERT INTO stats_" +  gameType + "(uuid, wins, loses) VALUES (?, ?, ?)");
+                queryStatement = this.api.getDataManager().getConnection().prepareStatement("INSERT INTO stats_" +  gameType + "(uuid, wins, loses) VALUES (?, ?, ?)");
 
             }
 
@@ -136,7 +136,7 @@ public class StatsDB {
 
             if (useKills && !kills.isEmpty() && kills.containsKey(uuid)) {
                 int value = kills.get(uuid);
-                PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("UPDATE stats_" + gameType + " SET kills = kills + ? WHERE uuid = ?");
+                PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET kills = kills + ? WHERE uuid = ?");
                 queryStatement.setInt(1, value);
                 queryStatement.setString(2, uuid);
                 queryStatement.executeUpdate();
@@ -145,7 +145,7 @@ public class StatsDB {
             }
             if (useDeaths && !deaths.isEmpty() && deaths.containsKey(uuid)) {
                 int value = deaths.get(uuid);
-                PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("UPDATE stats_" + gameType + " SET deaths = deaths + ? WHERE uuid = ?");
+                PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET deaths = deaths + ? WHERE uuid = ?");
                 queryStatement.setInt(1, value);
                 queryStatement.setString(2, uuid);
                 queryStatement.executeUpdate();
@@ -154,13 +154,13 @@ public class StatsDB {
             }
 
             if (useWins && !wins.isEmpty() && wins.contains(uuid)) {
-                PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("UPDATE stats_" + gameType + " SET wins = wins + 1 WHERE uuid = ?");
+                PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET wins = wins + 1 WHERE uuid = ?");
                 queryStatement.setString(1, uuid);
                 queryStatement.executeUpdate();
                 queryStatement.close();
             }
             if (useLoses && !loses.isEmpty() && loses.contains(uuid)) {
-                PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("UPDATE stats_" + gameType + " SET loses = loses + 1 WHERE uuid = ?");
+                PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET loses = loses + 1 WHERE uuid = ?");
                 queryStatement.setString(1, uuid);
                 queryStatement.executeUpdate();
                 queryStatement.close();
@@ -179,7 +179,7 @@ public class StatsDB {
                 for (Entry<String, Integer> entry : kills.entrySet()) {
                     String uuid = entry.getKey();
                     int value = entry.getValue();
-                    PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("UPDATE stats_" + gameType + " SET kills = kills + ? WHERE uuid = ?");
+                    PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET kills = kills + ? WHERE uuid = ?");
                     queryStatement.setInt(1, value);
                     queryStatement.setString(2, uuid);
                     queryStatement.executeUpdate();
@@ -190,7 +190,7 @@ public class StatsDB {
                 for (Entry<String, Integer> entry : deaths.entrySet()) {
                     String uuid = entry.getKey();
                     int value = entry.getValue();
-                    PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("UPDATE stats_" + gameType + " SET deaths = deaths + ? WHERE uuid = ?");
+                    PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET deaths = deaths + ? WHERE uuid = ?");
                     queryStatement.setInt(1, value);
                     queryStatement.setString(2, uuid);
                     queryStatement.executeUpdate();
@@ -199,7 +199,7 @@ public class StatsDB {
             }
             if (useWins && !wins.isEmpty()) {
                 for (String uuid : wins) {
-                    PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("UPDATE stats_" + gameType + " SET wins = wins + 1 WHERE uuid = ?");
+                    PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET wins = wins + 1 WHERE uuid = ?");
                     queryStatement.setString(1, uuid);
                     queryStatement.executeUpdate();
                     queryStatement.close();
@@ -207,7 +207,7 @@ public class StatsDB {
             }
             if (useLoses && !loses.isEmpty()) {
                 for (String uuid : loses) {
-                    PreparedStatement queryStatement = this.api.getDataManager().getconnection().prepareStatement("UPDATE stats_" + gameType + " SET loses = loses + 1 WHERE uuid = ?");
+                    PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET loses = loses + 1 WHERE uuid = ?");
                     queryStatement.setString(1, uuid);
                     queryStatement.executeUpdate();
                     queryStatement.close();

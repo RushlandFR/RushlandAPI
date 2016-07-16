@@ -100,7 +100,7 @@ public class DataManager {
         return this.playerdb;
     }
 
-    public Connection getconnection() {
+    public Connection getConnection() {
         if(isConnected()){
             return this.connection;
         } else {
