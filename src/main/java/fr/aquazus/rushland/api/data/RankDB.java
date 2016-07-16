@@ -101,7 +101,7 @@ public class RankDB {
         }
     }
 
-    public boolean isRankExist(String rankname) {
+    public boolean rankExist(String rankname) {
         try {
             PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("SELECT id FROM RankSystem WHERE rank = ?");
 
@@ -123,7 +123,7 @@ public class RankDB {
 
     public boolean addnewRank(String rankname, int defaultranklevel) {
         try {
-            if (!isRankExist(rankname)) {
+            if (!rankExist(rankname)) {
                 PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("INSERT INTO RankSystem(rank, permLevel) VALUES(?, ?)");
 
                 pst.setString(1, rankname);
@@ -143,7 +143,7 @@ public class RankDB {
 
     public boolean removeRank(String rankname) {
         try {
-            if (isRankExist(rankname)) {
+            if (rankExist(rankname)) {
                 PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("DELETE FROM RankSystem WHERE rank = ?");
 
                 pst.setString(1, rankname);
@@ -163,7 +163,7 @@ public class RankDB {
     public boolean setdefaultlevel(int ID, String name, int level){
         if (ID == 1) {
             try {
-                if (isRankExist(name)) {
+                if (rankExist(name)) {
                     PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE RankSystem SET permLevel = ? WHERE rank = ?");
 
                     pst.setInt(1, level);

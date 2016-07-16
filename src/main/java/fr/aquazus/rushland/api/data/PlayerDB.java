@@ -104,7 +104,7 @@ public class PlayerDB {
 
     public void setRankPlayer(Player player, String rank, boolean isFemale) {
         try {
-            if (this.api.getDataManager().getRankSystemDB().isRankExist(rank)) {
+            if (this.api.getDataManager().getRankSystemDB().rankExist(rank)) {
                 PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("UPDATE PlayerInfo SET playerRank = ?, rankFemale = ? WHERE uuid = ?");
 
                 pst.setString(1, rank);
