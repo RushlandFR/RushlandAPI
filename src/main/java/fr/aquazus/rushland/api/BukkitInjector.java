@@ -24,10 +24,12 @@ public class BukkitInjector extends JavaPlugin {
         api = new RushlandAPI(this);
     }
 
+    @Override
     public void onEnable() {
         api.enable();
     }
 
+    @Override
     public void onDisable() {
         api.disable();
     }
