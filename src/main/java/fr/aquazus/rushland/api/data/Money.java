@@ -35,8 +35,8 @@ public class Money {
     }
 
     public boolean updateMoney(PlayerInfo pInfo) {
-        setPlayermoney(pInfo.getPlayer(), "rushcoins", pInfo.getRushcoins());
-        setPlayermoney(pInfo.getPlayer(), "shopcoins", pInfo.getShopcoins());
+        setPlayermoney(pInfo.getUUID(), "rushcoins", pInfo.getRushcoins());
+        setPlayermoney(pInfo.getUUID(), "shopcoins", pInfo.getShopcoins());
         return true;
     }
 
