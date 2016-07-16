@@ -89,11 +89,11 @@ public class PlayerDB {
         return null;
     }
 
-    public void setPlayerPermLevel(Player player , int ranklevel){
+    public void setPlayerPermLevel(Player player , int rankLevel){
         try {
             PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET permLevel = ? WHERE uuid=?");
 
-            pst.setInt(1, ranklevel);
+            pst.setInt(1, rankLevel);
             pst.setString(2, player.getUniqueId().toString());
             pst.executeUpdate();
             pst.close();
