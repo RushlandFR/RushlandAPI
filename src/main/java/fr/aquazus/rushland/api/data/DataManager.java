@@ -104,8 +104,8 @@ public class DataManager {
         if(isConnected()){
             return this.connection;
         } else {
-            deconnection();
-            connection();
+            disconnect();
+            connect();
             return this.connection;
         }
     }
@@ -123,7 +123,7 @@ public class DataManager {
         return false;
     }
 
-    public void connection() {
+    public void connect() {
         this.configfile = new File(this.rushland.getDataFolder(),"config.yml");
         this.config = YamlConfiguration.loadConfiguration(configfile);
 
@@ -148,7 +148,7 @@ public class DataManager {
         }
     }
 
-    public void deconnection() {
+    public void disconnect() {
         if (isConnected()) {
             try {
                 this.connection.close();
@@ -165,10 +165,10 @@ public class DataManager {
         this.rushland.getLogger().info("Refreshing MariaDB pool...");
         try {
             if (isConnected()) {
-                deconnection();
-                connection();
+                disconnect();
+                connect();
             } else {
-                connection();
+                connect();
             }
         } catch (Exception e) {
             e.printStackTrace();
