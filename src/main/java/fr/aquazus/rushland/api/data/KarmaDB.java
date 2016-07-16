@@ -120,16 +120,16 @@ public class KarmaDB {
         }
     }
 
-    public boolean addnewKarma(String karmaname, int defaultkarmalevel) {
+    public boolean addnewKarma(String karmaname, int defaultKarmaLevel) {
         try {
             if (!karmaList.containsKey(karmaname)) {
                 PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("INSERT INTO KarmaSystem (karma, permLevel) VALUES(?, ?)");
 
                 pst.setString(1, karmaname);
-                pst.setInt(2, defaultkarmalevel);
+                pst.setInt(2, defaultKarmaLevel);
                 pst.executeUpdate();
                 pst.close();
-                karmaList.put(karmaname, defaultkarmalevel);
+                karmaList.put(karmaname, defaultKarmaLevel);
 
                 return true;
             } else {
@@ -140,14 +140,14 @@ public class KarmaDB {
         }
     }
 
-    public boolean removeKarma(String karmaname) {
+    public boolean removeKarma(String karmaName) {
         try {
-            if (!karmaList.containsKey(karmaname)) {
+            if (!karmaList.containsKey(karmaName)) {
                 PreparedStatement pst = this.api.getDataManager().getconnection().prepareStatement("DELETE FROM KarmaSystem WHERE karma= ?");
-                pst.setString(1, karmaname);
+                pst.setString(1, karmaName);
                 pst.executeUpdate();
                 pst.close();
-                karmaList.remove(karmaname);
+                karmaList.remove(karmaName);
                 return true;
             } else {
                 return false;
