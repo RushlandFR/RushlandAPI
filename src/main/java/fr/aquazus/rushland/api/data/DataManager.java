@@ -131,9 +131,10 @@ public class DataManager {
             try {
                 String ip = config.getString("database.host");
                 String user = config.getString("database.user");
+                int port = config.getInt("database.port");
                 String passwd = config.getString("database.password");
                 String db = config.getString("database.db");
-                String host="jdbc:mysql://"+ip+"/"+db, username = user, passeword = passwd;
+                String host="jdbc:mysql://"+ip+":"+port+"/"+db, username = user, passeword = passwd;
                 this.connection = (Connection) DriverManager.getConnection(host,username,passeword);
 
                 dataId = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.rushland, new Runnable() {
