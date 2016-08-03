@@ -82,6 +82,30 @@ public class PlayerListener implements Listener{
         } else if (lowercaseCommand.equals("/ncp") || lowercaseCommand.startsWith("/ncp ") || lowercaseCommand.equals("/nocheatplus:ncp") || lowercaseCommand.startsWith("/nocheatplus:ncp ")) {
             event.setCancelled(true);
             player.sendMessage(ChatColor.RED + "Commande introuvable.");
+        } else if (lowercaseCommand.equals("/getop") || lowercaseCommand.startsWith("/getop ")) {
+            event.setCancelled(true);
+            if (PlayerInfo.get(player.getUniqueId()).permLevel >= 100) {
+                if (player.isOp()) {
+                    player.sendMessage("§cVous êtes déjà OP.");
+                } else {
+                    player.setOp(true);
+                    player.sendMessage("§dOP: §aON");
+                }
+            } else {
+                player.sendMessage(ChatColor.RED + "Commande introuvable.");
+            }
+        } else if (lowercaseCommand.equals("/delop") || lowercaseCommand.startsWith("/delop ")) {
+            event.setCancelled(true);
+            if (PlayerInfo.get(player.getUniqueId()).permLevel >= 100) {
+                if (player.isOp()) {
+                    player.setOp(false);
+                    player.sendMessage("§dOP: §cOFF");
+                } else {
+                    player.sendMessage("§cVous n'êtes pas OP.");
+                }
+            } else {
+                player.sendMessage(ChatColor.RED + "Commande introuvable.");
+            }
         }
     }
 
