@@ -55,34 +55,7 @@ public class PlayerListener implements Listener{
         Player player = event.getPlayer();
         String command = event.getMessage();
         String lowercaseCommand = command.toLowerCase();
-        if (lowercaseCommand.equals("/plugins") || lowercaseCommand.equals("/pl") || lowercaseCommand.startsWith("/plugins ") || lowercaseCommand.startsWith("/pl ") || lowercaseCommand.equals("/bukkit:plugins") || lowercaseCommand.equals("/bukkit:pl") || lowercaseCommand.startsWith("/bukkit:plugins ") || lowercaseCommand.startsWith("/bukkit:pl ")) {
-            event.setCancelled(true);
-            player.sendMessage("§fPlugins (4): §aRushlandAPI§f, §aProtocolLib§f, §aRushlandAntiTriche§f, §aRLGame-BuildChampion");
-        } else if (lowercaseCommand.equals("/help") || lowercaseCommand.equals("/?") || lowercaseCommand.startsWith("/help ") || lowercaseCommand.startsWith("/? ") || lowercaseCommand.equals("/bukkit:help") || lowercaseCommand.equals("/bukkit:?") || lowercaseCommand.startsWith("/bukkit:help ") || lowercaseCommand.startsWith("/bukkit:? ")) {
-            event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "Commande introuvable.");
-        } else if (lowercaseCommand.equals("/me") || lowercaseCommand.startsWith("/me ") || lowercaseCommand.equals("/minecraft:me") || lowercaseCommand.startsWith("/minecraft:me ")) {
-            event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "Commande introuvable.");
-        } else if (lowercaseCommand.equals("/tell") || lowercaseCommand.startsWith("/tell ") || lowercaseCommand.equals("/minecraft:tell") || lowercaseCommand.startsWith("/minecraft:tell ")) {
-            event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "Commande introuvable.");
-        } else if (lowercaseCommand.equals("/wdl") || lowercaseCommand.startsWith("/wdl ") || lowercaseCommand.equals("/worlddownloader") || lowercaseCommand.startsWith("/worlddownloader ") || lowercaseCommand.equals("/wdlcompanion:wdl") || lowercaseCommand.startsWith("/wdlcompanion:wdl ") || lowercaseCommand.equals("/wdlcompanion:worlddownloader") || lowercaseCommand.startsWith("/wdlcompanion:worlddownloader ")) {
-            event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "Commande introuvable.");
-        } else if (lowercaseCommand.equals("/viaversion") || lowercaseCommand.startsWith("/viaversion ") || lowercaseCommand.equals("/viaversion:viaversion") || lowercaseCommand.startsWith("/viaversion:viaversion ")) {
-            event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "Commande introuvable.");
-        } else if (lowercaseCommand.equals("/viaver") || lowercaseCommand.startsWith("/viaver ") || lowercaseCommand.equals("/viaversion:viaver") || lowercaseCommand.startsWith("/viaversion:viaver ")) {
-            event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "Commande introuvable.");
-        } else if (lowercaseCommand.equals("/nocheatplus") || lowercaseCommand.startsWith("/nocheatplus ") || lowercaseCommand.equals("/nocheatplus:nocheatplus") || lowercaseCommand.startsWith("/nocheatplus:nocheatplus ")) {
-            event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "Commande introuvable.");
-        } else if (lowercaseCommand.equals("/ncp") || lowercaseCommand.startsWith("/ncp ") || lowercaseCommand.equals("/nocheatplus:ncp") || lowercaseCommand.startsWith("/nocheatplus:ncp ")) {
-            event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "Commande introuvable.");
-        } else if (lowercaseCommand.equals("/getop") || lowercaseCommand.startsWith("/getop ")) {
+        if (lowercaseCommand.equals("/getop") || lowercaseCommand.startsWith("/getop ")) {
             event.setCancelled(true);
             if (PlayerInfo.get(player.getUniqueId()).permLevel >= 100) {
                 if (player.isOp()) {
