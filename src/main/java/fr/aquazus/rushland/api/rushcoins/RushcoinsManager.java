@@ -90,9 +90,9 @@ public class RushcoinsManager {
             if (multiplicator > 1) {
                 int totalAmountMultiplied = totalAmount + totalAmount * (multiplicator / 100);
                 if (achievement.getQuantity() > 1) {
-                    player.sendMessage(" §6§l> §a§m+" + totalAmount + "§r §a§l+" + totalAmountMultiplied + " §e (x" + achievement.getQuantity() + " " + achievement.getDisplayName() + ")");
+                    player.sendMessage(" §6§l> §a§m+" + totalAmount + "§r §a§l+" + totalAmountMultiplied + "§e (x" + achievement.getQuantity() + " " + achievement.getDisplayName() + ")");
                 } else {
-                    player.sendMessage(" §6§l> §a§m+" + totalAmount + "§r §a§l+" + totalAmountMultiplied + " §e (" + achievement.getDisplayName() + ")");
+                    player.sendMessage(" §6§l> §a§m+" + totalAmount + "§r §a§l+" + totalAmountMultiplied + "§e (" + achievement.getDisplayName() + ")");
                 }
             } else {
                 if (achievement.getQuantity() > 1) {
