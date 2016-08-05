@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import fr.aquazus.rushland.api.BukkitInjector;
 import fr.aquazus.rushland.api.RushlandAPI;
+import fr.aquazus.rushland.api.data.PlayerInfo;
 
 /*
  * Ce fichier est soumis à des droits d'auteur.
@@ -65,25 +66,56 @@ public class RushcoinsManager {
         if (achievements.get(player.getUniqueId().toString()).isEmpty()) {
             return;
         }
+        
+        int multiplicator = 1;
+        String rank = "player";
+        
+        PlayerInfo pInfo = PlayerInfo.get(player.getUniqueId());
+        if (pInfo.getKarmaRank().equalsIgnoreCase("or")) {
+            multiplicator = 5;
+            rank = "§eOr";
+        } else if (pInfo.getKarmaRank().equalsIgnoreCase("diamant")) {
+            multiplicator = 10;
+            rank = "§bDiamant";
+        } else if (pInfo.getKarmaRank().equalsIgnoreCase("emeraude")) {
+            multiplicator = 15;
+            rank = "§aEmeraude";
+        }
 
         player.sendMessage("§6§m§l---------------------");
         player.sendMessage("§e§lGains de RushCoins :");
         player.sendMessage(" ");
         for (RushcoinsAchievement achievement : achievements.get(player.getUniqueId().toString()).values()) {
             int totalAmount = achievement.getReward() * achievement.getQuantity();
-            if (achievement.getQuantity() > 1) {
-                player.sendMessage(" §6§l> §a§l+" + totalAmount + "§e (x" + achievement.getQuantity() + " " + achievement.getDisplayName() + ")");
+            if (multiplicator > 1) {
+                int totalAmountMultiplied = totalAmount + totalAmount * (multiplicator / 100);
+                if (achievement.getQuantity() > 1) {
+                    player.sendMessage(" §6§l> §a§m+" + totalAmount + "§r §a§l+" + totalAmountMultiplied + " §e (x" + achievement.getQuantity() + " " + achievement.getDisplayName() + ")");
+                } else {
+                    player.sendMessage(" §6§l> §a§m+" + totalAmount + "§r §a§l+" + totalAmountMultiplied + " §e (" + achievement.getDisplayName() + ")");
+                }
             } else {
-                player.sendMessage(" §6§l> §a§l+" + totalAmount + "§e (" + achievement.getDisplayName() + ")");
+                if (achievement.getQuantity() > 1) {
+                    player.sendMessage(" §6§l> §a§l+" + totalAmount + "§e (x" + achievement.getQuantity() + " " + achievement.getDisplayName() + ")");
+                } else {
+                    player.sendMessage(" §6§l> §a§l+" + totalAmount + "§e (" + achievement.getDisplayName() + ")");
+                }
             }
+        }
+        if (multiplicator > 1) {
+            player.sendMessage("§aBonus de §a§l+" + multiplicator + "%§a actif (Grade " + rank + "§a)");
         }
         player.sendMessage("§6§m§l---------------------");
 
+        final int finalMultiplicator = multiplicator;
         Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
             @Override
             public void run() {
                 for (RushcoinsAchievement achievement : achievements.get(player.getUniqueId().toString()).values()) {
                     int totalAmount = achievement.getReward() * achievement.getQuantity();
+                    if (finalMultiplicator > 1) {
+                        totalAmount += totalAmount * (finalMultiplicator / 100);
+                    }
                     api.getDataManager().getMoneyAPI().addPlayerMoney(player, "rushcoins", totalAmount);
                 }
             }
