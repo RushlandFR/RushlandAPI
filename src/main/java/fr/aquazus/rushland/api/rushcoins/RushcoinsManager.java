@@ -100,7 +100,8 @@ public class RushcoinsManager {
         for (RushcoinsAchievement achievement : achievements.get(player.getUniqueId().toString()).values()) {
             int totalAmount = achievement.getReward() * achievement.getQuantity();
             if (multiplicator > 1) {
-                int totalAmountMultiplied = totalAmount + totalAmount * (multiplicator / 100);
+                int totalAmountMultiplied = totalAmount;
+                totalAmountMultiplied += totalAmount * (multiplicator / 100);
                 if (achievement.getQuantity() > 1) {
                     player.sendMessage(" §6§l> §a§m+" + totalAmount + "§r §a§l+" + totalAmountMultiplied + "§e (x" + achievement.getQuantity() + " " + achievement.getDisplayName() + ")");
                 } else {
@@ -115,6 +116,7 @@ public class RushcoinsManager {
             }
         }
         if (multiplicator > 1) {
+            player.sendMessage(" ");
             player.sendMessage("§aBonus de §a§l+" + multiplicator + "%§a actif (Grade " + rank + "§a)");
         }
         player.sendMessage("§6§m§l---------------------");
