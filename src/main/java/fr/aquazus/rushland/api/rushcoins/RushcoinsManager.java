@@ -79,18 +79,18 @@ public class RushcoinsManager {
             return;
         }
         
-        int multiplicator = 1;
+        Double multiplicator = (double) 1;
         String rank = "player";
         
         PlayerInfo pInfo = PlayerInfo.get(player.getUniqueId());
         if (pInfo.getKarmaRank().equalsIgnoreCase("or")) {
-            multiplicator = 5;
+            multiplicator = (double) 5;
             rank = "§eOr";
         } else if (pInfo.getKarmaRank().equalsIgnoreCase("diamant")) {
-            multiplicator = 10;
+            multiplicator = (double) 10;
             rank = "§bDiamant";
         } else if (pInfo.getKarmaRank().equalsIgnoreCase("emeraude")) {
-            multiplicator = 15;
+            multiplicator = (double) 15;
             rank = "§aEmeraude";
         }
 
@@ -98,20 +98,20 @@ public class RushcoinsManager {
         player.sendMessage("§e§lGains de RushCoins :");
         player.sendMessage(" ");
         for (RushcoinsAchievement achievement : achievements.get(player.getUniqueId().toString()).values()) {
-            int totalAmount = achievement.getReward() * achievement.getQuantity();
+            Double totalAmount = (double) achievement.getReward() * achievement.getQuantity();
             if (multiplicator > 1) {
-                int totalAmountMultiplied = totalAmount;
+                Double totalAmountMultiplied = totalAmount;
                 totalAmountMultiplied += totalAmount * (multiplicator / 100);
                 if (achievement.getQuantity() > 1) {
-                    player.sendMessage(" §6§l> §a§m+" + totalAmount + "§r §a§l+" + totalAmountMultiplied + "§e (x" + achievement.getQuantity() + " " + achievement.getDisplayName() + ")");
+                    player.sendMessage(" §6§l> §a§m+" + totalAmount.intValue() + "§r §a§l+" + totalAmountMultiplied.intValue() + "§e (x" + achievement.getQuantity() + " " + achievement.getDisplayName() + ")");
                 } else {
-                    player.sendMessage(" §6§l> §a§m+" + totalAmount + "§r §a§l+" + totalAmountMultiplied + "§e (" + achievement.getDisplayName() + ")");
+                    player.sendMessage(" §6§l> §a§m+" + totalAmount.intValue() + "§r §a§l+" + totalAmountMultiplied.intValue() + "§e (" + achievement.getDisplayName() + ")");
                 }
             } else {
                 if (achievement.getQuantity() > 1) {
-                    player.sendMessage(" §6§l> §a§l+" + totalAmount + "§e (x" + achievement.getQuantity() + " " + achievement.getDisplayName() + ")");
+                    player.sendMessage(" §6§l> §a§l+" + totalAmount.intValue() + "§e (x" + achievement.getQuantity() + " " + achievement.getDisplayName() + ")");
                 } else {
-                    player.sendMessage(" §6§l> §a§l+" + totalAmount + "§e (" + achievement.getDisplayName() + ")");
+                    player.sendMessage(" §6§l> §a§l+" + totalAmount.intValue() + "§e (" + achievement.getDisplayName() + ")");
                 }
             }
         }
@@ -121,16 +121,16 @@ public class RushcoinsManager {
         }
         player.sendMessage("§6§m§l---------------------");
 
-        final int finalMultiplicator = multiplicator;
+        final Double finalMultiplicator = multiplicator;
         Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
             @Override
             public void run() {
                 for (RushcoinsAchievement achievement : achievements.get(player.getUniqueId().toString()).values()) {
-                    int totalAmount = achievement.getReward() * achievement.getQuantity();
+                    Double totalAmount = (double) achievement.getReward() * achievement.getQuantity();
                     if (finalMultiplicator > 1) {
                         totalAmount += totalAmount * (finalMultiplicator / 100);
                     }
-                    api.getDataManager().getMoneyAPI().addPlayerMoney(player, "rushcoins", totalAmount);
+                    api.getDataManager().getMoneyAPI().addPlayerMoney(player, "rushcoins", totalAmount.intValue());
                 }
             }
         });
