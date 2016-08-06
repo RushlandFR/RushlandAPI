@@ -39,6 +39,12 @@ public class RushcoinsManager {
     }
 
     public void addAchievement(Player player, RushcoinsAchievement achievement) {
+        if (player == null) {
+            return;
+        }
+        if (player.getUniqueId() == null) {
+            return;
+        }
         if (!achievements.containsKey(player.getUniqueId().toString())) {
             HashMap<String, RushcoinsAchievement> newHashmap = new HashMap<>();
             newHashmap.put(achievement.getId(), achievement);
@@ -57,6 +63,12 @@ public class RushcoinsManager {
     }
 
     public void giveRewards(Player player) {
+        if (player == null) {
+            return;
+        }
+        if (player.getUniqueId() == null) {
+            return;
+        }
         if (!achievements.containsKey(player.getUniqueId().toString())) {
             return;
         }
