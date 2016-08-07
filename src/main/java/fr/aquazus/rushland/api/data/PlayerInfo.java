@@ -5,10 +5,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import fr.aquazus.rushland.api.BukkitInjector;
 import fr.aquazus.rushland.api.RushlandAPI;
+import fr.aquazus.rushland.api.events.PlayerLoadedEvent;
 
 /*
  * Ce fichier est soumis à des droits d'auteur.
@@ -64,8 +66,8 @@ public class PlayerInfo {
 
     public PlayerInfo(Player player) {
         this.player = player;
-        this.uuid = this.player.getUniqueId();
-        ResultSet resultSet = api.getDataManager().getPlayerDB().getPlayerInfo(player);
+        this.uuid = player.getUniqueId();
+        ResultSet resultSet = api.getDataManager().getPlayerDB().getPlayerInfo(uuid);
         try {
             rank = resultSet.getString("playerRank");
             karma = resultSet.getString("playerKarma");
@@ -82,7 +84,7 @@ public class PlayerInfo {
                 expire = resultSet.getDate("expire");
                 now = resultSet.getDate("now");
                 if (expire.before(now)) {
-                    api.getDataManager().getPlayerDB().deleteKarmaPlayer(player);
+                    api.getDataManager().getPlayerDB().deleteKarmaPlayer(uuid);
                     karma = "player";
                 }
             }
@@ -94,6 +96,7 @@ public class PlayerInfo {
     }
 
     public PlayerInfo(UUID uuid) {
+        this.player = Bukkit.getPlayer(uuid);
         this.uuid = uuid;
         ResultSet resultSet = api.getDataManager().getPlayerDB().getPlayerInfo(uuid);
         try {
@@ -120,6 +123,7 @@ public class PlayerInfo {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        api.playerList.add(this);
     }
 
     public int getMaxPermLevel() {
@@ -149,12 +153,18 @@ public class PlayerInfo {
     public UUID getUUID() {
         return this.uuid;
     }
+    
     public int getRushcoins() {
         return this.rushcoins;
     }
 
     public int getShopcoins() {
         return this.shopcoins;
+    }
+    
+    public void callEvent() {
+        PlayerLoadedEvent event = new PlayerLoadedEvent(this);
+        Bukkit.getServer().getPluginManager().callEvent(event);
     }
 
     public void remove() {

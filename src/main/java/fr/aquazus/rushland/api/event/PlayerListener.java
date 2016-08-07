@@ -129,27 +129,26 @@ public class PlayerListener implements Listener{
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerLoginKick(final PlayerLoginEvent event) {
-        Bukkit.getScheduler().runTaskLater(this.api.getRushland(), new Runnable() {
-            @Override
-            public void run() {
-                final Player player = event.getPlayer();
-                PlayerInfo playerInfo = new PlayerInfo(player);
-                if (event.getResult() == PlayerLoginEvent.Result.KICK_WHITELIST) {
-                    if (playerInfo.getMaxPermLevel() >= 10) {
-                        event.setResult(PlayerLoginEvent.Result.ALLOWED);
-                        event.allow();
-                    } else {
-                        playerInfo.remove();
-                    }
-                } else if (event.getResult() == PlayerLoginEvent.Result.KICK_FULL) {
-                    if (playerInfo.getMaxPermLevel() >= 10) {
-                        event.setResult(PlayerLoginEvent.Result.ALLOWED);
-                        event.allow();
-                    } else {
-                        playerInfo.remove();
-                    }
-                }
+        final Player player = event.getPlayer();
+        PlayerInfo playerInfo = new PlayerInfo(player);
+        if (event.getResult() == PlayerLoginEvent.Result.KICK_WHITELIST) {
+            if (playerInfo.getMaxPermLevel() >= 10) {
+                event.setResult(PlayerLoginEvent.Result.ALLOWED);
+                event.allow();
+                playerInfo.callEvent();
+            } else {
+                playerInfo.remove();
             }
-        }, 20L);
+        } else if (event.getResult() == PlayerLoginEvent.Result.KICK_FULL) {
+            if (playerInfo.getMaxPermLevel() >= 10) {
+                event.setResult(PlayerLoginEvent.Result.ALLOWED);
+                event.allow();
+                playerInfo.callEvent();
+            } else {
+                playerInfo.remove();
+            }
+        } else {
+            playerInfo.callEvent();
+        }
     }
 }
