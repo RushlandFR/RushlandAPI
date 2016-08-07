@@ -55,7 +55,7 @@ public class PlayerInfo {
 
     public static PlayerInfo get(Player player) {
         for (PlayerInfo playerInfo : BukkitInjector.getApi().getPlayerList()) {
-            if (playerInfo.getPlayer().equals(player)) {
+            if (playerInfo.getUUID().equals(player.getUniqueId())) {
                 return playerInfo;
             }
         }
