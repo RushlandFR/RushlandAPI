@@ -83,15 +83,17 @@ public class RushcoinsManager {
         String rank = "player";
         
         PlayerInfo pInfo = PlayerInfo.get(player.getUniqueId());
-        if (pInfo.getKarmaRank().equalsIgnoreCase("or")) {
-            multiplicator = (double) 5;
-            rank = "§e§lOr";
-        } else if (pInfo.getKarmaRank().equalsIgnoreCase("diamant")) {
-            multiplicator = (double) 10;
-            rank = "§b§lDiamant";
-        } else if (pInfo.getKarmaRank().equalsIgnoreCase("emeraude")) {
-            multiplicator = (double) 15;
-            rank = "§a§lEmeraude";
+        if (pInfo != null) {
+            if (pInfo.getKarmaRank().equalsIgnoreCase("or")) {
+                multiplicator = (double) 5;
+                rank = "§e§lOr";
+            } else if (pInfo.getKarmaRank().equalsIgnoreCase("diamant")) {
+                multiplicator = (double) 10;
+                rank = "§b§lDiamant";
+            } else if (pInfo.getKarmaRank().equalsIgnoreCase("emeraude")) {
+                multiplicator = (double) 15;
+                rank = "§a§lEmeraude";
+            }
         }
 
         player.sendMessage("§6§m§l---------------------");
