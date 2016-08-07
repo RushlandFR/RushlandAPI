@@ -7,6 +7,7 @@ import org.bukkit.event.HandlerList;
 import fr.aquazus.rushland.api.data.PlayerInfo;
 
 public class PlayerLoadedEvent extends Event implements Cancellable {
+    
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled = false;
     private PlayerInfo pInfo;
