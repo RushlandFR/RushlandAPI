@@ -163,7 +163,7 @@ public class PlayerInfo {
     }
     
     public void callEvent() {
-        PlayerLoadedEvent event = new PlayerLoadedEvent(this);
+        PlayerLoadedEvent event = new PlayerLoadedEvent(this.player, this);
         Bukkit.getServer().getPluginManager().callEvent(event);
     }
 
