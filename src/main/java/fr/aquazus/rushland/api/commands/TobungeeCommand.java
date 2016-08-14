@@ -1,5 +1,6 @@
 package fr.aquazus.rushland.api.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -36,12 +37,16 @@ public class TobungeeCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "Vous n'êtes pas autorisé à faire cette commande.");
             return true;
         }
+        Player player = (Player) Bukkit.getOnlinePlayers().toArray()[0];
+        if (player == null) {
+            return true;
+        }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < args.length; i++) {
             sb.append(args[i]).append(" ");
         }
         String message = sb.toString().trim();
-        pl.runBungeeConsoleCommand(null, message);
+        pl.runBungeeConsoleCommand(player, message);
         return true;
     }
 }
