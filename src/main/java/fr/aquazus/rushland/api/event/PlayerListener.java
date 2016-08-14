@@ -114,22 +114,12 @@ public class PlayerListener implements Listener{
         });
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerLogin(final PlayerLoginEvent event) {
-        Bukkit.getScheduler().runTaskAsynchronously(this.api.getRushland(), new Runnable() {
-            @Override
-            public void run() {
-                final Player player = event.getPlayer();
-                if (!api.getDataManager().getPlayerDB().isInsert(player)) {
-                    api.getDataManager().getPlayerDB().playerInit(player);
-                }
-            }
-        });
-    }
-
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerLoginKick(final PlayerLoginEvent event) {
         final Player player = event.getPlayer();
+        if (!api.getDataManager().getPlayerDB().isInsert(player)) {
+            api.getDataManager().getPlayerDB().playerInit(player);
+        }
         PlayerInfo playerInfo = new PlayerInfo(player);
         if (event.getResult() == PlayerLoginEvent.Result.KICK_WHITELIST) {
             if (playerInfo.getMaxPermLevel() >= 10) {
