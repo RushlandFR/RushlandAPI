@@ -1,6 +1,5 @@
 package fr.aquazus.rushland.api.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,27 +22,26 @@ import fr.aquazus.rushland.api.RushlandAPI;
  * en cas de procès pour violation de droits d'auteur.
  */
 
-public class ReportCommand implements CommandExecutor {
+public class TobungeeCommand implements CommandExecutor {
 
     private RushlandAPI pl;
 
-    public ReportCommand(RushlandAPI pl) {
+    public TobungeeCommand(RushlandAPI pl) {
         this.pl = pl;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (sender instanceof Player) {
             sender.sendMessage(ChatColor.RED + "Vous n'êtes pas autorisé à faire cette commande.");
             return true;
         }
-        Player player = Bukkit.getPlayer(args[1]);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < args.length; i++) {
             sb.append(args[i]).append(" ");
         }
         String message = sb.toString().trim();
-        pl.runBungeeConsoleCommand(player, message);
+        pl.runBungeeConsoleCommand(null, message);
         return true;
     }
 }

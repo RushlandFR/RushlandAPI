@@ -11,7 +11,7 @@ commands:
       aliases: [spectator, spectateur]
    tp:
       description: Commande de teleportation
-   aacautoreport:
+   tobungee: 
       description: Commande de report RAT
    leave:
       description: Quitter la partie

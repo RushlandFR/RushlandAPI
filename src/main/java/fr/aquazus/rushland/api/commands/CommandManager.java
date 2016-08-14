@@ -32,7 +32,7 @@ public class CommandManager {
         this.rushland.getCommand("spec").setExecutor(new SpecCommand(this.api));
         this.rushland.getCommand("tp").setExecutor(new TpCommand(this.api));
         this.rushland.getCommand("leave").setExecutor(new LeaveCommand(this.api));
-        this.rushland.getCommand("aacautoreport").setExecutor(new ReportCommand(this.api));
+        this.rushland.getCommand("tobungee").setExecutor(new TobungeeCommand(this.api));
         this.rushland.getCommand("rlshop").setExecutor(new RlshopCommand(this.api));
         this.rushland.getCommand("addshopcoins").setExecutor(new AddShopCoinsCommand(this.api));
         this.rushland.getCommand("addrushcoins").setExecutor(new AddRushCoinsCommand(this.api));
