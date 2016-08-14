@@ -67,6 +67,7 @@ public class PlayerInfo {
     public PlayerInfo(Player player) {
         this.player = player;
         this.uuid = player.getUniqueId();
+        this.rank = "player";
         ResultSet resultSet = api.getDataManager().getPlayerDB().getPlayerInfo(uuid);
         try {
             rank = resultSet.getString("playerRank");
@@ -98,6 +99,7 @@ public class PlayerInfo {
     public PlayerInfo(UUID uuid) {
         this.player = Bukkit.getPlayer(uuid);
         this.uuid = uuid;
+        this.rank = "player";
         ResultSet resultSet = api.getDataManager().getPlayerDB().getPlayerInfo(uuid);
         try {
             rank = resultSet.getString("playerRank");
