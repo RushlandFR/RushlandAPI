@@ -44,7 +44,7 @@ public class PlayerInfo {
     public String karma;
 
     public boolean isFemale = false;
-    public Date expire, now ;
+    public Date expire;
 
     public static PlayerInfo get(UUID uuid) {
         for (PlayerInfo playerInfo : BukkitInjector.getApi().getPlayerList()) {
@@ -83,8 +83,7 @@ public class PlayerInfo {
             }
             if (!karma.equalsIgnoreCase("player") && !karma.equalsIgnoreCase("emeraude")) {
                 expire = resultSet.getDate("expire");
-                now = resultSet.getDate("now");
-                if (expire.before(now)) {
+                if (expire.getTime() < System.currentTimeMillis()) {
                     api.getDataManager().getPlayerDB().deleteKarmaPlayer(uuid);
                     karma = "player";
                 }
@@ -115,8 +114,7 @@ public class PlayerInfo {
             }
             if (!karma.equalsIgnoreCase("player") && !karma.equalsIgnoreCase("emeraude")) {
                 expire = resultSet.getDate("expire");
-                now = resultSet.getDate("now");
-                if (expire.before(now)) {
+                if (expire.getTime() < System.currentTimeMillis()) {
                     api.getDataManager().getPlayerDB().deleteKarmaPlayer(uuid);
                     karma = "player";
                 }
