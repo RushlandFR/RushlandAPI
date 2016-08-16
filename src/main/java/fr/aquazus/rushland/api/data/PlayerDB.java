@@ -212,9 +212,9 @@ public class PlayerDB {
 
     public void deleteKarmaPlayer(UUID uuid) {
         try {
-            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = player, expire = null WHERE uuid = ?");
-
-            pst.setString(1, uuid.toString());
+            PreparedStatement pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = null WHERE uuid = ?");
+            pst.setString(1, "player");
+            pst.setString(2, uuid.toString());
             pst.executeUpdate();
             pst.close();
         } catch (SQLException e) {
