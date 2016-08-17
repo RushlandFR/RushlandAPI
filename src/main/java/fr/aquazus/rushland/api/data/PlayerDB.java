@@ -27,7 +27,7 @@ public class PlayerDB {
 
     private RushlandAPI api;
 
-    public PlayerDB(RushlandAPI api){
+    public PlayerDB(RushlandAPI api) {
         this.api = api;
     }
 
