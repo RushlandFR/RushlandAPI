@@ -1,6 +1,7 @@
 package fr.aquazus.rushland.api;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
@@ -107,7 +108,11 @@ public class RushlandAPI {
 
     public void disable() {
         RedisDataSender.getPublisher.publish(RedisDataSender.serverId + "#delete#" + RedisDataSender.ports);
-        this.datamanager.disconnect();
+        try {
+            this.datamanager.getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 

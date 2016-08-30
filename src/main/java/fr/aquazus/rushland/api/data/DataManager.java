@@ -2,6 +2,7 @@
 package fr.aquazus.rushland.api.data;
 
 import java.io.File;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -9,8 +10,6 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-
-import com.mysql.jdbc.Connection;
 
 import fr.aquazus.rushland.api.BukkitInjector;
 import fr.aquazus.rushland.api.RushlandAPI;
@@ -47,8 +46,8 @@ public class DataManager {
 
     public ArrayList<String> moneylist;
 
-
-    int dataId;
+    private String ip, user, passwd, db, host;
+    private int port;
 
     /**
      * Gestion des PermLevel:
@@ -73,6 +72,28 @@ public class DataManager {
         this.statsDB = new StatsDB(this.rushland, this.api);
         this.playerdb = new PlayerDB(this.api);
         this.karmaDB = new KarmaDB(this.rushland, this.api);
+        loadValues();
+    }
+
+    public void loadValues() {
+        this.configfile = new File(this.rushland.getDataFolder(),"config.yml");
+        this.config = YamlConfiguration.loadConfiguration(configfile);
+        this.ip = config.getString("database.host");
+        this.user = config.getString("database.user");
+        this.port = config.getInt("database.port");
+        this.passwd = config.getString("database.password");
+        this.db = config.getString("database.db");
+        this.host = "jdbc:mysql://" + this.ip + ":" + this.port + "/" + this.db;
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this.rushland, new Runnable() {
+            public void run() {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                connect();
+            }
+        }, 20L*300, 20L*300);
     }
 
     public void initData() {
@@ -101,79 +122,15 @@ public class DataManager {
     }
 
     public Connection getConnection() {
-        if(isConnected()){
-            return this.connection;
-        } else {
-            disconnect();
-            connect();
-            return this.connection;
-        }
-    }
-
-    public boolean isConnected() {
-        try {
-            if((this.connection == null) || (this.connection.isClosed())) {
-                return false;
-            } else {
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+        return this.connection;
     }
 
     public void connect() {
-        this.configfile = new File(this.rushland.getDataFolder(),"config.yml");
-        this.config = YamlConfiguration.loadConfiguration(configfile);
-
-        if (!isConnected()) {
-            try {
-                String ip = config.getString("database.host");
-                String user = config.getString("database.user");
-                int port = config.getInt("database.port");
-                String passwd = config.getString("database.password");
-                String db = config.getString("database.db");
-                String host="jdbc:mysql://"+ip+":"+port+"/"+db, username = user, passeword = passwd;
-                this.connection = (Connection) DriverManager.getConnection(host,username,passeword);
-
-                dataId = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.rushland, new Runnable() {
-                    public void run() {
-                        refreshConnection();
-                    }
-                }, 20L*300);
-            } catch (SQLException e) {
-                Bukkit.getServer().shutdown();
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void disconnect() {
-        if (isConnected()) {
-            try {
-                this.connection.close();
-                Bukkit.getScheduler().cancelTask(dataId);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } else {
-            this.rushland.getLogger().info("MariaDB pool is already disconnected...");
-        }
-    }
-
-    public void refreshConnection() {
-        this.rushland.getLogger().info("Refreshing MariaDB pool...");
         try {
-            if (isConnected()) {
-                disconnect();
-                connect();
-            } else {
-                connect();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            this.connection = DriverManager.getConnection(host, user, passwd);
+        } catch (SQLException e) {
             Bukkit.getServer().shutdown();
+            e.printStackTrace();
         }
     }
 }
