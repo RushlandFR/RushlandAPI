@@ -103,9 +103,14 @@ public class PlayerListener implements Listener{
         });
     }
 
+    boolean done = false;
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.setJoinMessage(null);
+        if (!done) {
+            this.api.getDataManager().startTask();
+            done = true;
+        }
         Bukkit.getScheduler().runTaskAsynchronously(rushland, new Runnable() {
             @Override
             public void run() {

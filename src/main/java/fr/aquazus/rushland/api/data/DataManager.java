@@ -84,6 +84,9 @@ public class DataManager {
         this.passwd = config.getString("database.password");
         this.db = config.getString("database.db");
         this.host = "jdbc:mysql://" + this.ip + ":" + this.port + "/" + this.db;
+    }
+    
+    public void startTask() {
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this.rushland, new Runnable() {
             public void run() {
                 try {
