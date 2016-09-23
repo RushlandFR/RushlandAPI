@@ -54,7 +54,7 @@ public class SpecCommand implements CommandExecutor {
                     giveFly(player);
                     sender.sendMessage(ChatColor.DARK_PURPLE + "Votre mode de jeu est maintenant aventure");
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.showPlayer(p);
+                        p.showPlayer(player);
                     }
                 }
             }
