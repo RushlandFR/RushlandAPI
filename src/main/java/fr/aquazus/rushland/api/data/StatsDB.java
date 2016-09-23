@@ -133,9 +133,13 @@ public class StatsDB {
     public void insertPlayer(String uuid) {
         try {
             rushland.getLogger().info("Inserting stats into SQL Server...");
+            HashMap<String, Integer> killsCopy = new HashMap<String, Integer>(kills);
+            HashMap<String, Integer> deathsCopy = new HashMap<String, Integer>(deaths);
+            ArrayList<String> winsCopy = new ArrayList<String>(wins);
+            ArrayList<String> losesCopy = new ArrayList<String>(loses);
 
-            if (useKills && !kills.isEmpty() && kills.containsKey(uuid)) {
-                int value = kills.get(uuid);
+            if (useKills && !killsCopy.isEmpty() && killsCopy.containsKey(uuid)) {
+                int value = killsCopy.get(uuid);
                 PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET kills = kills + ? WHERE uuid = ?");
                 queryStatement.setInt(1, value);
                 queryStatement.setString(2, uuid);
@@ -143,8 +147,8 @@ public class StatsDB {
                 queryStatement.close();
                 kills.remove(uuid);
             }
-            if (useDeaths && !deaths.isEmpty() && deaths.containsKey(uuid)) {
-                int value = deaths.get(uuid);
+            if (useDeaths && !deathsCopy.isEmpty() && deathsCopy.containsKey(uuid)) {
+                int value = deathsCopy.get(uuid);
                 PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET deaths = deaths + ? WHERE uuid = ?");
                 queryStatement.setInt(1, value);
                 queryStatement.setString(2, uuid);
@@ -153,13 +157,13 @@ public class StatsDB {
                 deaths.remove(uuid);
             }
 
-            if (useWins && !wins.isEmpty() && wins.contains(uuid)) {
+            if (useWins && !winsCopy.isEmpty() && winsCopy.contains(uuid)) {
                 PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET wins = wins + 1 WHERE uuid = ?");
                 queryStatement.setString(1, uuid);
                 queryStatement.executeUpdate();
                 queryStatement.close();
             }
-            if (useLoses && !loses.isEmpty() && loses.contains(uuid)) {
+            if (useLoses && !losesCopy.isEmpty() && losesCopy.contains(uuid)) {
                 PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET loses = loses + 1 WHERE uuid = ?");
                 queryStatement.setString(1, uuid);
                 queryStatement.executeUpdate();
@@ -171,12 +175,16 @@ public class StatsDB {
         }
     }
 
-    public void insert() {
+    public synchronized void insert() {
         try {
             rushland.getLogger().info("Inserting stats into SQL Server...");
+            HashMap<String, Integer> killsCopy = new HashMap<String, Integer>(kills);
+            HashMap<String, Integer> deathsCopy = new HashMap<String, Integer>(deaths);
+            ArrayList<String> winsCopy = new ArrayList<String>(wins);
+            ArrayList<String> losesCopy = new ArrayList<String>(loses);
 
-            if (useKills && !kills.isEmpty()) {
-                for (Entry<String, Integer> entry : kills.entrySet()) {
+            if (useKills && !killsCopy.isEmpty()) {
+                for (Entry<String, Integer> entry : killsCopy.entrySet()) {
                     String uuid = entry.getKey();
                     int value = entry.getValue();
                     PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET kills = kills + ? WHERE uuid = ?");
@@ -186,8 +194,8 @@ public class StatsDB {
                     queryStatement.close();
                 }
             }
-            if (useDeaths && !deaths.isEmpty()) {
-                for (Entry<String, Integer> entry : deaths.entrySet()) {
+            if (useDeaths && !deathsCopy.isEmpty()) {
+                for (Entry<String, Integer> entry : deathsCopy.entrySet()) {
                     String uuid = entry.getKey();
                     int value = entry.getValue();
                     PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET deaths = deaths + ? WHERE uuid = ?");
@@ -197,7 +205,7 @@ public class StatsDB {
                     queryStatement.close();
                 }
             }
-            if (useWins && !wins.isEmpty()) {
+            if (useWins && !winsCopy.isEmpty()) {
                 for (String uuid : wins) {
                     PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET wins = wins + 1 WHERE uuid = ?");
                     queryStatement.setString(1, uuid);
@@ -205,7 +213,7 @@ public class StatsDB {
                     queryStatement.close();
                 }
             }
-            if (useLoses && !loses.isEmpty()) {
+            if (useLoses && !losesCopy.isEmpty()) {
                 for (String uuid : loses) {
                     PreparedStatement queryStatement = this.api.getDataManager().getConnection().prepareStatement("UPDATE stats_" + gameType + " SET loses = loses + 1 WHERE uuid = ?");
                     queryStatement.setString(1, uuid);
