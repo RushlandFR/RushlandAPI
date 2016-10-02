@@ -36,6 +36,8 @@ public class PlayerInfo {
     public int rankPermLevel = 0;
     public int rushcoins = 0;
     public int shopcoins = 0;
+    public int level = 0;
+    public int xp = 0;
 
     /**
      * @return "player" if the target is not rank/karma
@@ -75,6 +77,8 @@ public class PlayerInfo {
             permLevel = resultSet.getInt("permLevel");
             rushcoins = resultSet.getInt("rushcoins");
             shopcoins = resultSet.getInt("shopcoins");
+            level = resultSet.getInt("level");
+            xp = resultSet.getInt("xp");
             if (!rank.equalsIgnoreCase("player")) {
                 if (api.getDataManager().getRankSystemDB().getRankList().containsKey(rank)) {
                     rankPermLevel = api.getDataManager().getRankSystemDB().getRankList().get(rank);
@@ -160,6 +164,14 @@ public class PlayerInfo {
 
     public int getShopcoins() {
         return this.shopcoins;
+    }
+    
+    public int getLevel() {
+        return this.level;
+    }
+    
+    public int getXp() {
+        return this.xp;
     }
     
     public void callEvent() {
