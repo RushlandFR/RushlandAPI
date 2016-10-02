@@ -1,6 +1,7 @@
 package fr.aquazus.rushland.api.data;
 
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
@@ -110,6 +111,8 @@ public class PlayerInfo {
             permLevel = resultSet.getInt("permLevel");
             rushcoins = resultSet.getInt("rushcoins");
             shopcoins = resultSet.getInt("shopcoins");
+            level = resultSet.getInt("level");
+            xp = resultSet.getInt("xp");
             if (!rank.equalsIgnoreCase("player")) {
                 if (api.getDataManager().getRankSystemDB().getRankList().containsKey(rank)) {
                     rankPermLevel = api.getDataManager().getRankSystemDB().getRankList().get(rank);
@@ -157,7 +160,7 @@ public class PlayerInfo {
     public UUID getUUID() {
         return this.uuid;
     }
-    
+
     public int getRushcoins() {
         return this.rushcoins;
     }
@@ -165,15 +168,15 @@ public class PlayerInfo {
     public int getShopcoins() {
         return this.shopcoins;
     }
-    
+
     public int getLevel() {
         return this.level;
     }
-    
+
     public int getXp() {
         return this.xp;
     }
-    
+
     public void callEvent() {
         PlayerLoadedEvent event = new PlayerLoadedEvent(this.player, this);
         Bukkit.getServer().getPluginManager().callEvent(event);
@@ -181,6 +184,26 @@ public class PlayerInfo {
 
     public void remove() {
         api.getDataManager().getMoneyAPI().updateMoney(this);
+
+        Bukkit.getScheduler().runTaskAsynchronously(this.api.getRushland(), new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PreparedStatement pst = api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET xp = ? WHERE uuid = ?");
+                    pst.setInt(1, xp);
+                    pst.setString(2, player.getUniqueId().toString());
+                    pst.executeUpdate();
+
+                    PreparedStatement pst2 = api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET level = ? WHERE uuid = ?");
+                    pst2.setInt(1, level);
+                    pst2.setString(2, player.getUniqueId().toString());
+                    pst2.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         this.player = null;
         this.uuid = null;
         api.getPlayerList().remove(this);
