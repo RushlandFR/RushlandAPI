@@ -176,6 +176,14 @@ public class PlayerInfo {
     public int getXp() {
         return this.xp;
     }
+    
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
 
     public void callEvent() {
         PlayerLoadedEvent event = new PlayerLoadedEvent(this.player, this);
