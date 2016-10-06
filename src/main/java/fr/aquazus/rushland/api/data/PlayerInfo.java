@@ -275,12 +275,12 @@ public class PlayerInfo {
                 try {
                     PreparedStatement pst = api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET xp = ? WHERE uuid = ?");
                     pst.setInt(1, xp);
-                    pst.setString(2, player.getUniqueId().toString());
+                    pst.setString(2, uuid.toString());
                     pst.executeUpdate();
 
                     PreparedStatement pst2 = api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET level = ? WHERE uuid = ?");
                     pst2.setInt(1, level);
-                    pst2.setString(2, player.getUniqueId().toString());
+                    pst2.setString(2, uuid.toString());
                     pst2.executeUpdate();
                 } catch (SQLException e) {
                     e.printStackTrace();
