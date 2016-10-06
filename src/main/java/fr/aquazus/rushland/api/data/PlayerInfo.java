@@ -268,19 +268,19 @@ public class PlayerInfo {
 
     public void remove() {
         api.getDataManager().getMoneyAPI().updateMoney(this);
-
+        final UUID finalUuid = uuid;
         Bukkit.getScheduler().runTaskAsynchronously(this.api.getRushland(), new Runnable() {
             @Override
             public void run() {
                 try {
                     PreparedStatement pst = api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET xp = ? WHERE uuid = ?");
                     pst.setInt(1, xp);
-                    pst.setString(2, uuid.toString());
+                    pst.setString(2, finalUuid.toString());
                     pst.executeUpdate();
 
                     PreparedStatement pst2 = api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET level = ? WHERE uuid = ?");
                     pst2.setInt(1, level);
-                    pst2.setString(2, uuid.toString());
+                    pst2.setString(2, finalUuid.toString());
                     pst2.executeUpdate();
                 } catch (SQLException e) {
                     e.printStackTrace();
