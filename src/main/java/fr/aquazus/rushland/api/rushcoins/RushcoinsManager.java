@@ -69,6 +69,10 @@ public class RushcoinsManager {
         if (player.getUniqueId() == null) {
             return;
         }
+        PlayerInfo pInfo = PlayerInfo.get(player.getUniqueId());
+        if (pInfo != null) {
+            pInfo.showRecap();
+        }
         if (!achievements.containsKey(player.getUniqueId().toString())) {
             return;
         }
@@ -81,8 +85,6 @@ public class RushcoinsManager {
         
         Double multiplicator = (double) 1;
         String rank = "player";
-        
-        PlayerInfo pInfo = PlayerInfo.get(player.getUniqueId());
         if (pInfo != null) {
             if (pInfo.getKarmaRank().equalsIgnoreCase("or")) {
                 multiplicator = (double) 5;

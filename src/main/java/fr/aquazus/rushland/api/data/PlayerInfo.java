@@ -216,6 +216,30 @@ public class PlayerInfo {
         int total = currentLevel.getRequiredCumulatedXp() + xp;
         return nextLevel.getRequiredCumulatedXp() - total;
     }
+    
+    public void showRecap() {
+        player.sendMessage("§9Points d'XP gagnés pendant cette partie: §a" + sessionXp);
+        player.sendMessage("§9Progression niveau " + level + " -> " + (level + 1) + ": " + generateXpBar());
+        final UUID finalUuid = uuid;
+        Bukkit.getScheduler().runTaskAsynchronously(this.api.getRushland(), new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PreparedStatement pst = api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET xp = ? WHERE uuid = ?");
+                    pst.setInt(1, xp);
+                    pst.setString(2, finalUuid.toString());
+                    pst.executeUpdate();
+
+                    PreparedStatement pst2 = api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET level = ? WHERE uuid = ?");
+                    pst2.setInt(1, level);
+                    pst2.setString(2, finalUuid.toString());
+                    pst2.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
     public String getRank() {
         return this.rank;
@@ -268,25 +292,6 @@ public class PlayerInfo {
 
     public void remove() {
         api.getDataManager().getMoneyAPI().updateMoney(this);
-        final UUID finalUuid = uuid;
-        Bukkit.getScheduler().runTaskAsynchronously(this.api.getRushland(), new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    PreparedStatement pst = api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET xp = ? WHERE uuid = ?");
-                    pst.setInt(1, xp);
-                    pst.setString(2, finalUuid.toString());
-                    pst.executeUpdate();
-
-                    PreparedStatement pst2 = api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET level = ? WHERE uuid = ?");
-                    pst2.setInt(1, level);
-                    pst2.setString(2, finalUuid.toString());
-                    pst2.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         this.player = null;
         this.uuid = null;
