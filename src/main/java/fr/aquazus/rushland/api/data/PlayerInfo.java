@@ -150,6 +150,11 @@ public class PlayerInfo {
     }
 
     public void addXp(int amount) {
+        if (level == 100) {
+            xp += amount;
+            sessionXp += amount;
+            return;
+        }
         Player player = Bukkit.getPlayer(uuid);
         int next = level + 1;
         Leveling currentLevel = Leveling.valueOf("LEVEL_" + level);
@@ -219,7 +224,9 @@ public class PlayerInfo {
     
     public void showRecap() {
         player.sendMessage("§9Points d'XP gagnés pendant cette partie: §a" + sessionXp);
-        player.sendMessage("§9Progression niveau " + level + " -> " + (level + 1) + ": " + generateXpBar());
+        if (level != 100) {
+            player.sendMessage("§9Progression niveau " + level + " -> " + (level + 1) + ": " + generateXpBar());
+        }
         final UUID finalUuid = uuid;
         Bukkit.getScheduler().runTaskAsynchronously(this.api.getRushland(), new Runnable() {
             @Override
