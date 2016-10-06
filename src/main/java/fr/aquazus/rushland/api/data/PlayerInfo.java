@@ -208,6 +208,14 @@ public class PlayerInfo {
         }
         return "§e" + percent + "% " + bar;
     }
+    
+    public int getRequiredXp() {
+        int next = level + 1;
+        Leveling currentLevel = Leveling.valueOf("LEVEL_" + level);
+        Leveling nextLevel = Leveling.valueOf("LEVEL_" + next);
+        int total = currentLevel.getRequiredCumulatedXp() + xp;
+        return nextLevel.getRequiredCumulatedXp() - total;
+    }
 
     public String getRank() {
         return this.rank;
