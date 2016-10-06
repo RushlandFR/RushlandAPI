@@ -107,15 +107,15 @@ public enum Leveling {
     private int level;
     private int requiredXp;
     private int requiredCumulatedXp;
-    private int rewardedShopcoins;
+    private int rewardedRushcoins;
     private String chatColor;
     private String customLevelUpMessage;
 
-    Leveling(int level, int requiredXp, int requiredCumulatedXp, int rewardedShopcoins, String chatColor, String customLevelUpMessage) {
+    Leveling(int level, int requiredXp, int requiredCumulatedXp, int rewardedRushcoins, String chatColor, String customLevelUpMessage) {
         this.level = level;
         this.requiredXp = requiredXp;
         this.requiredCumulatedXp = requiredCumulatedXp;
-        this.rewardedShopcoins = rewardedShopcoins;
+        this.rewardedRushcoins = rewardedRushcoins;
         this.chatColor = chatColor;
         this.customLevelUpMessage = customLevelUpMessage;
     }
@@ -132,8 +132,8 @@ public enum Leveling {
         return this.requiredCumulatedXp;
     }
     
-    public int getRewardedShopcoins() {
-        return this.rewardedShopcoins;
+    public int getRewardedRushcoins() {
+        return this.rewardedRushcoins;
     }
     
     public String getChatColor() {

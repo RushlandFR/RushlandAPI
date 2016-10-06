@@ -7,11 +7,18 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.Sound;
+import org.bukkit.FireworkEffect.Type;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.FireworkMeta;
 
 import fr.aquazus.rushland.api.BukkitInjector;
 import fr.aquazus.rushland.api.RushlandAPI;
 import fr.aquazus.rushland.api.events.PlayerLoadedEvent;
+import fr.aquazus.rushland.api.utils.Title;
 
 /*
  * Ce fichier est soumis à des droits d'auteur.
@@ -141,6 +148,44 @@ public class PlayerInfo {
         }
     }
 
+    public void addXp(int amount) {
+        Player player = Bukkit.getPlayer(uuid);
+        int next = level + 1;
+        Leveling currentLevel = Leveling.valueOf("LEVEL_" + level);
+        Leveling nextLevel = Leveling.valueOf("LEVEL_" + next);
+        xp += amount;
+        int total = currentLevel.getRequiredCumulatedXp() + xp;
+        if (total >= nextLevel.getRequiredCumulatedXp()) {
+            level++;
+            xp = total - nextLevel.getRequiredCumulatedXp();
+            if (nextLevel.getRewardedRushcoins() > 0) {
+                rushcoins += nextLevel.getRewardedRushcoins();
+                player.sendMessage("§eVous avez gagné " + nextLevel.getRewardedRushcoins() + " RushCoins.");
+            } else {
+                player.sendMessage(nextLevel.getCustomLevelUpMessage());
+            }
+            player.getWorld().playSound(player.getLocation(), Sound.LEVEL_UP, 1f, 1f);
+            new Title(" ", "§eNiveau supérieur !").send(player);
+            Bukkit.getServer().broadcastMessage("§e" + player.getName() + " est passé niveau §e§l" + level + "§e !");
+            Firework f = (Firework) player.getPlayer().getWorld().spawn(player.getLocation(), Firework.class);
+            FireworkMeta fm = f.getFireworkMeta();
+            fm.addEffect(FireworkEffect.builder()
+                    .flicker(false)
+                    .trail(false)
+                    .with(Type.BALL_LARGE)
+                    .withColor(Color.YELLOW)
+                    .build());
+            fm.setPower(0);
+            f.setFireworkMeta(fm);
+            Bukkit.getScheduler().runTaskLater(BukkitInjector.getApi().getRushland(), new Runnable() {
+                @Override
+                public void run() {
+                    f.detonate();
+                }
+            }, 1L);
+        }
+    }
+
     public String getRank() {
         return this.rank;
     }
@@ -176,7 +221,7 @@ public class PlayerInfo {
     public int getXp() {
         return this.xp;
     }
-    
+
     public void setLevel(int level) {
         this.level = level;
     }
