@@ -87,10 +87,6 @@ public class PlayerListener implements Listener{
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
         PlayerInfo pInfo = PlayerInfo.get(uuid);
-        if (!api.disableXpRecap) {
-            player.sendMessage("§9Points d'XP gagnés pendant cette partie: §a" + pInfo.sessionXp);
-            player.sendMessage("§9Progression niveau " + pInfo.getLevel() + " -> " + pInfo.getLevel() + 1 + ": " + pInfo.generateXpBar());
-        }
         Bukkit.getScheduler().runTaskLater(rushland, new Runnable() {
             @Override
             public void run() {
