@@ -46,6 +46,7 @@ public class PlayerInfo {
     public int shopcoins = 0;
     public int level = 0;
     public int xp = 0;
+    public int sessionXp = 0;
 
     /**
      * @return "player" if the target is not rank/karma
@@ -154,6 +155,7 @@ public class PlayerInfo {
         Leveling currentLevel = Leveling.valueOf("LEVEL_" + level);
         Leveling nextLevel = Leveling.valueOf("LEVEL_" + next);
         xp += amount;
+        sessionXp += amount;
         int total = currentLevel.getRequiredCumulatedXp() + xp;
         if (total >= nextLevel.getRequiredCumulatedXp()) {
             level++;
@@ -184,6 +186,27 @@ public class PlayerInfo {
                 }
             }, 1L);
         }
+    }
+    
+    public String generateXpBar() {
+        int next = level + 1;
+        Leveling currentLevel = Leveling.valueOf("LEVEL_" + level);
+        Leveling nextLevel = Leveling.valueOf("LEVEL_" + next);
+        int total = currentLevel.getRequiredCumulatedXp() + xp;
+        int percent = (total / nextLevel.getRequiredCumulatedXp()) * 100;
+        int greenAmount = percent / 10;
+        int redAmount = 10 - greenAmount;
+        String bar = "§a";
+        for (int i = 0; i < greenAmount + 1; i++) {
+            bar = bar + "█";
+        }
+        if (redAmount > 0) {
+            bar = bar + "§c";
+            for (int i = 0; i < redAmount + 1; i++) {
+                bar = bar + "█";
+            }
+        }
+        return "§e" + percent + "% " + bar;
     }
 
     public String getRank() {

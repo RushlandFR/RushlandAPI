@@ -48,6 +48,7 @@ public class RushlandAPI {
     private EventManager eventmanager;
     private RushcoinsManager rushcoinsManager;
     private ProtocolManager protocolManager;
+    public boolean disableXpRecap = false;
 
     public ArrayList<PlayerInfo> playerList = new ArrayList<>();
 
