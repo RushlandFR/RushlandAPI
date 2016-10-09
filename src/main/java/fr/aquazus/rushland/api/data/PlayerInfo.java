@@ -203,12 +203,12 @@ public class PlayerInfo {
         int greenAmount = percent / 10;
         int redAmount = 10 - greenAmount;
         String bar = "§a";
-        for (int i = 0; i < greenAmount + 1; i++) {
+        for (int i = 0; i < greenAmount; i++) {
             bar = bar + "█";
         }
         if (redAmount > 0) {
             bar = bar + "§c";
-            for (int i = 0; i < redAmount + 1; i++) {
+            for (int i = 0; i < redAmount; i++) {
                 bar = bar + "█";
             }
         }
