@@ -156,6 +156,7 @@ public class PlayerInfo {
             return;
         }
         Player player = Bukkit.getPlayer(uuid);
+        int oldLevel = level;
         int next = level + 1;
         Leveling currentLevel = Leveling.valueOf("LEVEL_" + level);
         Leveling nextLevel = Leveling.valueOf("LEVEL_" + next);
@@ -174,6 +175,9 @@ public class PlayerInfo {
             player.getWorld().playSound(player.getLocation(), Sound.LEVEL_UP, 1f, 1f);
             new Title(" ", "§eNiveau supérieur !").send(player);
             Bukkit.getServer().broadcastMessage("§e" + player.getName() + " est passé niveau §e§l" + level + "§e !");
+            if (player.getDisplayName().contains(currentLevel.getChatColor() + "(" + oldLevel + ")")) {
+                player.setDisplayName(player.getDisplayName().replace(currentLevel.getChatColor() + "(" + oldLevel + ")", nextLevel.getChatColor() + "(" + level + ""));
+            }
             Firework f = (Firework) player.getPlayer().getWorld().spawn(player.getLocation(), Firework.class);
             FireworkMeta fm = f.getFireworkMeta();
             fm.addEffect(FireworkEffect.builder()
@@ -189,7 +193,7 @@ public class PlayerInfo {
                 public void run() {
                     f.detonate();
                 }
-            }, 1L);
+            }, 2L);
         }
     }
     
