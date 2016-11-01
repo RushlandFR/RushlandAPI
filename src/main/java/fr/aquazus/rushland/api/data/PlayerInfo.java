@@ -195,10 +195,9 @@ public class PlayerInfo {
     
     public String generateXpBar() {
         int next = level + 1;
-        Leveling currentLevel = Leveling.valueOf("LEVEL_" + level);
         Leveling nextLevel = Leveling.valueOf("LEVEL_" + next);
-        int total = currentLevel.getRequiredCumulatedXp() + xp;
-        double doublePercent = ((double) total / (double) nextLevel.getRequiredCumulatedXp()) * 100.0;
+        int total = xp;
+        double doublePercent = ((double) total / (double) nextLevel.getRequiredXp()) * 100.0;
         int percent = (int) doublePercent;
         int greenAmount = percent / 10;
         int redAmount = 10 - greenAmount;
