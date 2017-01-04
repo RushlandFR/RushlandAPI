@@ -41,6 +41,10 @@ public class SpecCommand implements CommandExecutor {
             Player player = (Player) sender;
 
             if (PlayerInfo.get(player).getMaxPermLevel() >= 30) {
+                if (player.getWorld().getName().equalsIgnoreCase("hub") && PlayerInfo.get(player).getMaxPermLevel() < 40) {
+                    player.sendMessage("§cVous ne pouvez pas vous mettre en spec sur le hub.");
+                    return true;
+                }
                 if (player.getGameMode() != GameMode.SPECTATOR) {
                     player.setGameMode(GameMode.SPECTATOR);
                     sender.sendMessage(ChatColor.DARK_PURPLE + "Votre mode de jeu est maintenant spectateur");
