@@ -84,19 +84,25 @@ public class RushcoinsManager {
         }
         
         Double multiplicator = (double) 1;
+        Double displayMultiplicator = (double) 1;
         String rank = "player";
         if (pInfo != null) {
             if (pInfo.getKarmaRank().equalsIgnoreCase("or")) {
                 multiplicator = (double) 5;
+                displayMultiplicator = (double) 5;
                 rank = "§e§lOr";
             } else if (pInfo.getKarmaRank().equalsIgnoreCase("diamant")) {
                 multiplicator = (double) 10;
+                displayMultiplicator = (double) 10;
                 rank = "§b§lDiamant";
             } else if (pInfo.getKarmaRank().equalsIgnoreCase("emeraude")) {
                 multiplicator = (double) 15;
+                displayMultiplicator = (double) 15;
                 rank = "§a§lEmeraude";
             }
         }
+        
+        multiplicator += 900;
 
         player.sendMessage("§6§m§l---------------------");
         player.sendMessage("§e§lGains de RushCoins :");
@@ -121,7 +127,8 @@ public class RushcoinsManager {
         }
         if (multiplicator > 1) {
             player.sendMessage(" ");
-            player.sendMessage("§aBonus de §a§l+" + multiplicator + "%§a actif (Grade " + rank + "§a)");
+            player.sendMessage("§aBonus de §a§l+" + displayMultiplicator + "%§a actif (Grade " + rank + "§a)");
+            player.sendMessage("§aBonus de §c§l+900%§a actif (Compensation technique)");
         }
         player.sendMessage("§6§m§l---------------------");
 

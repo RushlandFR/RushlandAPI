@@ -150,6 +150,7 @@ public class PlayerInfo {
     }
 
     public void addXp(int amount) {
+    	amount = amount * 5;
         if (level == 100) {
             xp += amount;
             sessionXp += amount;

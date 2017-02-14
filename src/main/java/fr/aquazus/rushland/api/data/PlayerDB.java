@@ -186,6 +186,19 @@ public class PlayerDB {
             e.printStackTrace();
         }
     }
+    
+    public void set24hDiamond(UUID uuid) {
+        try {
+            PreparedStatement pst;
+            pst = this.api.getDataManager().getConnection().prepareStatement("UPDATE PlayerInfo SET playerKarma = ?, expire = DATE_ADD(NOW(), INTERVAL 24 HOUR) WHERE uuid = ?");
+            pst.setString(1, "diamant");
+            pst.setString(2, uuid.toString());
+            pst.executeUpdate();
+            pst.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 
     public void addMonth(UUID uuid) {
         try {
